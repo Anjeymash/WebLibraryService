@@ -27,7 +27,6 @@ public class SingIn implements Command {
 		String password;
 		String page = JspManager.INDEX;
 		User user = null;
-		RequestDispatcher dispatcher = null;
 		HttpSession session = request.getSession(true);
 
 		login = request.getParameter(ParameterManager.USER_LOGIN);
@@ -47,22 +46,14 @@ public class SingIn implements Command {
 				session.setAttribute(ParameterManager.USER_ROLE, user.getRole());
 			} else
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.WRONG_LOG_PASS);
-			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in SingIn", e);
 			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
-			dispatcher = request.getRequestDispatcher(page);
-			
-		} catch (NullPointerException e) {
-			log.error("NullPointerException in Singin", e);
-			page = JspManager.ERROR;
-			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
-			dispatcher = request.getRequestDispatcher(page);
-
-		} finally {
-			dispatcher.forward(request, response);
 		}
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+		dispatcher.forward(request, response);
 
 	}
 }

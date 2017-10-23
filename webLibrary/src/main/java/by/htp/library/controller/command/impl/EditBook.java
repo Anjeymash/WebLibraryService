@@ -31,7 +31,6 @@ public class EditBook implements Command {
 		String role;
 		ArrayList<Book> foundBooks = new ArrayList<>();
 		String page = JspManager.INDEX;
-		RequestDispatcher dispatcher = null;
 
 		id = Long.parseLong(request.getParameter(ParameterManager.BOOK_ID));
 		HttpSession session = request.getSession();
@@ -54,21 +53,13 @@ public class EditBook implements Command {
 					request.setAttribute(ParameterManager.ERROR_MES, MessageManager.RIGHTS);
 				}
 			}
-			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in EditBook", e);
-			dispatcher = request.getRequestDispatcher(page);
-			request.setAttribute(ParameterManager.ERROR_MES,  e.getMessage());
-
-		} catch (NullPointerException e) {
-			log.error("NullPointerException in EditBook", e);
-			page = JspManager.ERROR;
-			dispatcher = request.getRequestDispatcher(page);
-			request.setAttribute(ParameterManager.ERROR_MES,  e.getMessage());
-
-		} finally {
-			dispatcher.forward(request, response);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
 		}
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+		dispatcher.forward(request, response);
 	}
 }

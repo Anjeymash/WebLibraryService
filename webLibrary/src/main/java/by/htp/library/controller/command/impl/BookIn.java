@@ -25,8 +25,6 @@ public class BookIn implements Command {
 		Book book = new Book();
 		String page = JspManager.LIST_BOOK;
 		String role;
-		RequestDispatcher dispatcher = null;
-
 		id = Long.parseLong(request.getParameter(ParameterManager.BOOK_ID));
 		HttpSession session = request.getSession();
 		role = (String) session.getAttribute(ParameterManager.USER_ROLE);
@@ -47,24 +45,15 @@ public class BookIn implements Command {
 			} else {
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.NO_BOOKS);
 			}
-			dispatcher = request.getRequestDispatcher(page);
-			
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in BookIn", e);
-			request.setAttribute(ParameterManager.ERROR_MES,  e.getMessage());
-			dispatcher = request.getRequestDispatcher(page);
-			
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+
 		}
 
-		catch (NullPointerException e) {
-			log.error("NullPointerException in BookinIn", e);
-			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
-			page = JspManager.ERROR;
-			dispatcher = request.getRequestDispatcher(page);
-			
-		}
-		finally {dispatcher.forward(request, response);}
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+		dispatcher.forward(request, response);
 	}
 
 }

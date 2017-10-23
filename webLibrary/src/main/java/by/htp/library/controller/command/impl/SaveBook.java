@@ -25,7 +25,6 @@ public class SaveBook implements Command {
 		Long id;
 		Book book = new Book();
 		String page;
-		RequestDispatcher dispatcher = null;
 		page = JspManager.EDIT_BOOK;
 
 		// checking: new or existing
@@ -41,39 +40,29 @@ public class SaveBook implements Command {
 			book.setQuantity(Integer.parseInt(request.getParameter(ParameterManager.BOOK_QUANTITY)));
 			book.setStatus(request.getParameter(ParameterManager.BOOK_STATUS));
 			book.setContext(request.getParameter(ParameterManager.BOOK_CONTEXT));
+
+			ServiceFactory factory = ServiceFactory.getInstance();
+			LibraryService libraryService = factory.getLibraryService();
+
+			id = libraryService.saveBook(book);
+			book.setId(id);
+			response.sendRedirect("Controller?command=listbook&bookGenre=" + book.getGenre());
+
 		} catch (NumberFormatException e) {
 			log.error("ServiceException in SaveBook", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
 			request.setAttribute(ParameterManager.BOOK, book);
-			dispatcher = request.getRequestDispatcher(page);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
-		}
-		ServiceFactory factory = ServiceFactory.getInstance();
-		LibraryService libraryService = factory.getLibraryService();
-		try {
-			id = libraryService.saveBook(book);
-			book.setId(id);
-			response.sendRedirect("Controller?command=listbook&bookGenre=" + book.getGenre());
 		}
 
 		catch (ServiceException e) {
-
 			log.error("ServiceException in SaveBook", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
 			request.setAttribute(ParameterManager.BOOK, book);
-			try {
-				dispatcher = request.getRequestDispatcher(page);
-				dispatcher.forward(request, response);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+			dispatcher.forward(request, response);
 
-			} catch (NullPointerException e1) {
-				log.error("NullPointerException in SaveBook", e1);
-				page = JspManager.ERROR;
-				dispatcher = request.getRequestDispatcher(page);
-				request.setAttribute(ParameterManager.ERROR_MES, e1.getMessage());
-				dispatcher.forward(request, response);
-			} finally {
-				
-			}
 		}
 
 	}

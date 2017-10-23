@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import by.htp.library.bean.User;
 import by.htp.library.controller.Command;
 import by.htp.library.controller.datamanager.JspManager;
-import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
@@ -26,9 +25,7 @@ public class EditUserProfile implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long id;
 		User user;
-		String page;
-		RequestDispatcher dispatcher = null;
-
+		String page = JspManager.INDEX;
 		HttpSession session = request.getSession();
 		id = (Long) session.getAttribute(ParameterManager.USER_ID);
 		ServiceFactory factory = ServiceFactory.getInstance();
@@ -37,21 +34,13 @@ public class EditUserProfile implements Command {
 			user = clientService.fetchById(id);
 			request.setAttribute(ParameterManager.USER, user);
 			page = JspManager.EDIT_USER;
-			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in EditUser", e);
-			page = JspManager.INDEX;
 			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
-			dispatcher = request.getRequestDispatcher(page);
-		} catch (NullPointerException e) {
-			log.error("NullPointerException in EditUser", e);
-			page = JspManager.ERROR;
-			dispatcher = request.getRequestDispatcher(page);
-			request.setAttribute(ParameterManager.ERROR_MES,  e.getMessage());
-		} finally {
-			dispatcher.forward(request, response);
 		}
 
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+		dispatcher.forward(request, response);
 	}
 }

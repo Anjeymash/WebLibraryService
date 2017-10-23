@@ -27,7 +27,6 @@ public class SearchByAuthor implements Command {
 		ArrayList<Book> foundBooks = new ArrayList<>();
 		String page = JspManager.INDEX;
 		String searchParam;
-		RequestDispatcher dispatcher = null;
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		LibraryService libraryService = serviceFactory.getLibraryService();
 		searchParam = request.getParameter(ParameterManager.SEARCH_PARAM);
@@ -37,19 +36,12 @@ public class SearchByAuthor implements Command {
 			if (foundBooks.isEmpty())
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.NOT_EXIST);
 			request.setAttribute(ParameterManager.LIST_BOOK, foundBooks);
-			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in SearchByAuthor", e);
 			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
-			dispatcher = request.getRequestDispatcher(page);
-		} catch (NullPointerException e) {
-			log.error("NullPointerException in SearchByAuthor", e);
-			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
-			page = JspManager.ERROR;
-			dispatcher = request.getRequestDispatcher(page);
-		} finally {
-			dispatcher.forward(request, response);
 		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+		dispatcher.forward(request, response);
 	}
 }

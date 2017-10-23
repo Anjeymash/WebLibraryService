@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import by.htp.library.bean.Book;
 import by.htp.library.controller.Command;
 import by.htp.library.controller.datamanager.JspManager;
-import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.LibraryService;
 import by.htp.library.service.exception.ServiceException;
@@ -27,7 +26,6 @@ public class ListBook implements Command {
 		ArrayList<Book> foundBooks = new ArrayList<>();
 		String page = JspManager.INDEX;
 		String genre;
-		RequestDispatcher dispatcher = null;
 
 		genre = request.getParameter(ParameterManager.BOOK_GENRE);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -35,20 +33,13 @@ public class ListBook implements Command {
 		try {
 			foundBooks = libraryService.listBook(genre);
 			request.setAttribute(ParameterManager.LIST_BOOK, foundBooks);
-			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in ListBook", e);
 			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
-			dispatcher = request.getRequestDispatcher(page);
-
-		} catch (NullPointerException e) {
-			log.error("NullPointerException in ListBook", e);
-			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
-			page = JspManager.ERROR;
-			dispatcher = request.getRequestDispatcher(page);
-		} finally {
-			dispatcher.forward(request, response);
 		}
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+		dispatcher.forward(request, response);
 	}
 }
