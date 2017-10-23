@@ -20,6 +20,7 @@ public class AddBook implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String page;
 		HttpSession session = request.getSession();
+		RequestDispatcher dispatcher = null;
 		String role = (String) session.getAttribute(ParameterManager.USER_ROLE);
 		if (role.equals(RoleManager.ADMIN)) {
 			page = JspManager.EDIT_BOOK;
@@ -28,12 +29,17 @@ public class AddBook implements Command {
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.RIGHTS);
 		}
 		try {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-			dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher(page);
+		
 
 		} catch (NullPointerException e) {
 			log.error("NullPointerException in SingIn. Jsp's not found", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+			page = JspManager.ERROR;
+			dispatcher = request.getRequestDispatcher(page);
+			
+			
 		}
+		finally {dispatcher.forward(request, response);}
 	}
 }

@@ -28,6 +28,7 @@ public class SearchByTitle implements Command {
 		ArrayList<Book> foundBooks = new ArrayList<>();
 		String page = JspManager.INDEX;
 		String searchParam;
+		RequestDispatcher dispatcher = null;
 
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		LibraryService libraryService = serviceFactory.getLibraryService();
@@ -38,15 +39,19 @@ public class SearchByTitle implements Command {
 			if (foundBooks.isEmpty())
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.NOT_EXIST);
 			request.setAttribute(ParameterManager.LIST_BOOK, foundBooks);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-			dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher(page);
+			
 		} catch (ServiceException e) {
 			log.error("ServiceException in SearchByTitle", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
+			dispatcher = request.getRequestDispatcher(page);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
 		} catch (NullPointerException e) {
 			log.error("NullPointerException in SearchByTitle", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+			page = JspManager.ERROR;
+			dispatcher = request.getRequestDispatcher(page);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
 		}
+		finally {dispatcher.forward(request, response);}
 
 	}
 }

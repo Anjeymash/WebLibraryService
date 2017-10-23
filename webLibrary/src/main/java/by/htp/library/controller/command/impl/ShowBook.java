@@ -26,6 +26,7 @@ public class ShowBook implements Command {
 		Long id;
 		Book book;
 		String page;
+		RequestDispatcher dispatcher = null;
 
 		id = Long.parseLong(request.getParameter(ParameterManager.BOOK_ID));
 		// System.out.println(id);
@@ -35,17 +36,20 @@ public class ShowBook implements Command {
 			book = bookService.bookById(id);
 			request.setAttribute(ParameterManager.BOOK, book);
 			page = JspManager.LIST_BOOK;
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-			dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (ServiceException e) {
 			page = JspManager.INDEX;
 			log.error("ServiceException in ShowBook", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
+			dispatcher = request.getRequestDispatcher(page);
+			request.setAttribute(ParameterManager.ERROR_MES,  e.getMessage());
 		} catch (NullPointerException e) {
 			log.error("NullPointerException in SearchByAuthor", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+			page = JspManager.ERROR;
+			dispatcher = request.getRequestDispatcher(page);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+		} finally {
+			dispatcher.forward(request, response);
 		}
-
 	}
 }

@@ -12,22 +12,26 @@ import org.apache.logging.log4j.Logger;
 
 import by.htp.library.controller.Command;
 import by.htp.library.controller.datamanager.JspManager;
-import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 
 public class WrongRequest implements Command {
 	private static final Logger log = LogManager.getRootLogger();
+	RequestDispatcher dispatcher = null;
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String page = JspManager.INDEX;
 		try {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-			dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher(page);
+
 		} catch (NullPointerException e) {
-			log.error("NullPointerException in WronRequest", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+			log.error("WrongRequest error", e);
+			page = JspManager.ERROR;
+			dispatcher = request.getRequestDispatcher(page);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+		} finally {
+			dispatcher.forward(request, response);
 		}
 
 	}

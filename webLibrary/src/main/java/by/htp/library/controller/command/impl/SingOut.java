@@ -20,16 +20,19 @@ public class SingOut implements Command {
 	private static final Logger log = LogManager.getRootLogger();
 
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		RequestDispatcher dispatcher = null;
 		HttpSession session = request.getSession();
 		session.invalidate();
 		String page = JspManager.INDEX;
 		try {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-			dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher(page);
+			
 		} catch (NullPointerException e) {
 			log.error("NullPointerException in SingOut", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+			page = JspManager.ERROR;
+			dispatcher = request.getRequestDispatcher(page);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
 		}
+		finally {dispatcher.forward(request, response);}
 	}
 }

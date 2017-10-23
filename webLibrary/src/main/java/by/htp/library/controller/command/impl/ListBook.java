@@ -27,6 +27,7 @@ public class ListBook implements Command {
 		ArrayList<Book> foundBooks = new ArrayList<>();
 		String page = JspManager.INDEX;
 		String genre;
+		RequestDispatcher dispatcher = null;
 
 		genre = request.getParameter(ParameterManager.BOOK_GENRE);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -34,17 +35,20 @@ public class ListBook implements Command {
 		try {
 			foundBooks = libraryService.listBook(genre);
 			request.setAttribute(ParameterManager.LIST_BOOK, foundBooks);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-			dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in ListBook", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (NullPointerException e) {
 			log.error("NullPointerException in ListBook", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+			page = JspManager.ERROR;
+			dispatcher = request.getRequestDispatcher(page);
+		} finally {
+			dispatcher.forward(request, response);
 		}
-
 	}
 }

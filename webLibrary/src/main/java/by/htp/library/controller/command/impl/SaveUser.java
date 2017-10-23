@@ -28,6 +28,7 @@ public class SaveUser implements Command {
 		User user = new User();
 		String page;
 		HttpSession session = request.getSession();
+		RequestDispatcher dispatcher = null;
 
 		// checking: new user or existing
 		if (session.getAttribute(ParameterManager.USER_ID) != null) {
@@ -57,19 +58,20 @@ public class SaveUser implements Command {
 			response.sendRedirect("Controller?command=listbook");
 
 		} catch (ServiceException e) {
-
 			log.error("ServiceException in SaveUser", e);
-
 			page = JspManager.EDIT_USER;
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
 			request.setAttribute(ParameterManager.USER, user);
 			try {
-				RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-				dispatcher.forward(request, response);
+				dispatcher = request.getRequestDispatcher(page);
+				
 			} catch (NullPointerException e1) {
 				log.error("NullPointerException in SaveBook", e1);
-				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+				request.setAttribute(ParameterManager.ERROR_MES, e1.getMessage());
+				page = JspManager.ERROR;
+				dispatcher = request.getRequestDispatcher(page);
 			}
+			finally {dispatcher.forward(request, response);}
 		}
 
 	}

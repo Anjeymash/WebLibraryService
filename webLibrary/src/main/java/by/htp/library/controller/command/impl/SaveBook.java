@@ -25,42 +25,54 @@ public class SaveBook implements Command {
 		Long id;
 		Book book = new Book();
 		String page;
+		RequestDispatcher dispatcher = null;
+		page = JspManager.EDIT_BOOK;
 
 		// checking: new or existing
 		if ((request.getParameter(ParameterManager.BOOK_ID) != null)
 				&& ((request.getParameter(ParameterManager.BOOK_ID) != ""))) {
 			book.setId(Long.parseLong(request.getParameter(ParameterManager.BOOK_ID)));
 		}
-
-		book.setTitle(request.getParameter(ParameterManager.BOOK_TITLE));
-		book.setAuthor(request.getParameter(ParameterManager.BOOK_AUTHOR));
-		book.setGenre(request.getParameter(ParameterManager.BOOK_GENRE));
-		book.setYear(request.getParameter(ParameterManager.BOOK_YEAR));
-		book.setQuantity(Integer.parseInt(request.getParameter(ParameterManager.BOOK_QUANTITY)));
-		book.setStatus(request.getParameter(ParameterManager.BOOK_STATUS));
-		book.setContext(request.getParameter(ParameterManager.BOOK_CONTEXT));
-
-		System.out.println(book.toString());
-
+		try {
+			book.setTitle(request.getParameter(ParameterManager.BOOK_TITLE));
+			book.setAuthor(request.getParameter(ParameterManager.BOOK_AUTHOR));
+			book.setGenre(request.getParameter(ParameterManager.BOOK_GENRE));
+			book.setYear(request.getParameter(ParameterManager.BOOK_YEAR));
+			book.setQuantity(Integer.parseInt(request.getParameter(ParameterManager.BOOK_QUANTITY)));
+			book.setStatus(request.getParameter(ParameterManager.BOOK_STATUS));
+			book.setContext(request.getParameter(ParameterManager.BOOK_CONTEXT));
+		} catch (NumberFormatException e) {
+			log.error("ServiceException in SaveBook", e);
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
+			request.setAttribute(ParameterManager.BOOK, book);
+			dispatcher = request.getRequestDispatcher(page);
+			dispatcher.forward(request, response);
+		}
 		ServiceFactory factory = ServiceFactory.getInstance();
 		LibraryService libraryService = factory.getLibraryService();
-
 		try {
 			id = libraryService.saveBook(book);
 			book.setId(id);
 			response.sendRedirect("Controller?command=listbook&bookGenre=" + book.getGenre());
-		} catch (ServiceException e) {
+		}
+
+		catch (ServiceException e) {
 
 			log.error("ServiceException in SaveBook", e);
-			page = JspManager.EDIT_BOOK;
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
 			request.setAttribute(ParameterManager.BOOK, book);
 			try {
-				RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+				dispatcher = request.getRequestDispatcher(page);
 				dispatcher.forward(request, response);
+
 			} catch (NullPointerException e1) {
 				log.error("NullPointerException in SaveBook", e1);
-				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+				page = JspManager.ERROR;
+				dispatcher = request.getRequestDispatcher(page);
+				request.setAttribute(ParameterManager.ERROR_MES, e1.getMessage());
+				dispatcher.forward(request, response);
+			} finally {
+				
 			}
 		}
 

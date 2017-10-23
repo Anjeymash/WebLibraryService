@@ -26,7 +26,7 @@ public class DelBook implements Command {
 	private static final Logger log = LogManager.getRootLogger();
 
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		RequestDispatcher dispatcher = null;
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		LibraryService libraryService = serviceFactory.getLibraryService();
 		long bookID = 0;
@@ -59,19 +59,20 @@ public class DelBook implements Command {
 					request.setAttribute(ParameterManager.ERROR_MES, MessageManager.RIGHTS);
 				}
 			}
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-			dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher(page);
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in DelBook", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.WRONG_INPUT);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-			dispatcher.forward(request, response);
-			
+			request.setAttribute(ParameterManager.ERROR_MES,  e.getMessage());
+			dispatcher = request.getRequestDispatcher(page);
+
 		} catch (NullPointerException e) {
 			log.error("NullPointerException in BookinIn", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+			page = JspManager.ERROR;
+			dispatcher = request.getRequestDispatcher(page);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+		} finally {
+			dispatcher.forward(request, response);
 		}
-
 	}
 }

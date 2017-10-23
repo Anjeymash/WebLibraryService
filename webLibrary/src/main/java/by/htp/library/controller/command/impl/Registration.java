@@ -17,14 +17,16 @@ public class Registration implements Command {
 	private static final Logger log = LogManager.getRootLogger();
 
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher=null;
 		try {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(JspManager.EDIT_USER);
-			dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher(JspManager.EDIT_USER);
+			
 
 		} catch (NullPointerException e) {
 			log.error("NullPointerException in Registration. Jsp's not found", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.JSP_ERROR);
+			dispatcher = request.getRequestDispatcher(JspManager.ERROR);
+			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
 		}
-
+finally {dispatcher.forward(request, response);}
 	}
 }
