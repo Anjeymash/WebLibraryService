@@ -200,7 +200,7 @@
 				href="${bookinLink}"
 				onclick="if (!(confirm('Are you sure you want to reserve this book?'))) return false"><button
 						type="submit" class="btn btn-success">
-						<fmt:message key="label.addtocart" />
+						<fmt:message key="label.bookin" />
 					</button></a> <a href="${returnLink}"
 				onclick="if (!(confirm('Are you sure you want to return to book-list?'))) return false"><button
 						type="submit" class="btn btn-primary">

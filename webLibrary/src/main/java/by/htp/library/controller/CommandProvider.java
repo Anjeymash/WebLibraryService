@@ -17,6 +17,7 @@ import by.htp.library.controller.command.impl.ShowBook;
 import by.htp.library.controller.command.impl.ListBook;
 import by.htp.library.controller.command.impl.Registration;
 import by.htp.library.controller.command.impl.SaveBook;
+import by.htp.library.controller.command.impl.SaveRent;
 import by.htp.library.controller.command.impl.SingIn;
 import by.htp.library.controller.command.impl.SingOut;
 import by.htp.library.controller.command.impl.WrongRequest;
@@ -41,6 +42,7 @@ public class CommandProvider {
 		repository.put(CommandName.SAVEUSER, new SaveUser());
 		repository.put(CommandName.REGISTRATION, new Registration());
 		repository.put(CommandName.BOOKIN, new BookIn());
+		repository.put(CommandName.SAVERENT, new SaveRent());
 		
 		
 

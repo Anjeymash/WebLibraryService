@@ -17,8 +17,9 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
+<div class="navbar navbar-cent">
 	<h3><fmt:message key="label.bookform" /></h3>
-
+</div>
 	<div class="navbar navbar-inverse">
 		<div class="container">
 			<div class="row">

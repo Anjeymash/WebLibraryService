@@ -24,6 +24,12 @@ public final class ParameterManager {
 	public static final String BOOK_STATUS = "bookStatus";
 	public static final String BOOK_CONTEXT = "bookContext";
 	
+	public static final String RENT = "rent";
+	public static final String RENT_ID = "rentId";
+	public static final String RENT_START = "startDate";
+	public static final String RENT_END = "endDate";
+	
+	
 	public static final String ERROR_MES = "errorMessage";
 	public static final String MES = "message";
 	public static final String SEARCH_PARAM = "searchparam";

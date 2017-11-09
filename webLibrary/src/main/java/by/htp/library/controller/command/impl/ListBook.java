@@ -26,14 +26,17 @@ public class ListBook implements Command {
 		ArrayList<Book> foundBooks = new ArrayList<>();
 		String page = JspManager.INDEX;
 		String genre;
-
+		String mes;
+		
 		genre = request.getParameter(ParameterManager.BOOK_GENRE);
+		mes = request.getParameter(ParameterManager.MES);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		LibraryService libraryService = serviceFactory.getLibraryService();
 		try {
 			foundBooks = libraryService.listBook(genre);
 			request.setAttribute(ParameterManager.LIST_BOOK, foundBooks);
-
+			request.setAttribute(ParameterManager.MES, mes);
+			
 		} catch (ServiceException e) {
 			log.error("ServiceException in ListBook", e);
 			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());

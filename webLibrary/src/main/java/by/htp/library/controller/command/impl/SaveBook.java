@@ -46,7 +46,7 @@ public class SaveBook implements Command {
 
 			id = libraryService.saveBook(book);
 			book.setId(id);
-			response.sendRedirect("Controller?command=listbook&bookGenre=" + book.getGenre());
+			response.sendRedirect("Controller?command=listbook&bookGenre=" + book.getGenre()+"&message="+MessageManager.ADDED);
 
 		} catch (NumberFormatException e) {
 			log.error("ServiceException in SaveBook", e);

@@ -14,6 +14,7 @@ import by.htp.library.controller.datamanager.JspManager;
 import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.LibraryService;
+import by.htp.library.service.RentService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.factory.ServiceFactory;
 
@@ -30,6 +31,7 @@ public class BookIn implements Command {
 		role = (String) session.getAttribute(ParameterManager.USER_ROLE);
 		ServiceFactory factory = ServiceFactory.getInstance();
 		LibraryService libraryService = factory.getLibraryService();
+		//RentService rentService = factory.getRentService();
 		try {
 			book = libraryService.bookById(id);
 			request.setAttribute(ParameterManager.BOOK, book);
@@ -40,7 +42,9 @@ public class BookIn implements Command {
 				libraryService.bookIn(id);
 				book = libraryService.bookById(id);
 				request.setAttribute(ParameterManager.BOOK, book);
-				request.setAttribute(ParameterManager.MES, MessageManager.RESERVED);
+				request.setAttribute(ParameterManager.BOOK_ID, id);
+				//request.setAttribute(ParameterManager.MES, MessageManager.RESERVED);
+				page = JspManager.EDIT_RENT;
 
 			} else {
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.NO_BOOKS);
