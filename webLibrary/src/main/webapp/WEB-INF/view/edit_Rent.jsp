@@ -17,9 +17,11 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
+<div class="navbar navbar-cent">
 	<h3>
 		<fmt:message key="label.orderprofile" />
 	</h3>
+	</div>
 
 	<div class="navbar navbar-inverse">
 		<div class="container">
@@ -37,8 +39,7 @@
 						<table>
 
 							<tr>
-								<th><img src="img/ch.jpg" width="100" height="100"
-									class="img-thumbnail"></th>
+								<th><img src="img/${book.id}.jpg" width="200" height="200"  class="img-responsive"></th>
 
 							</tr>
 
@@ -85,7 +86,7 @@
 
 								<tr>
 									<td><label><fmt:message key="label.end" /> (*):</label></td>
-									<td><input type="date" class="form-control" name="endDate"
+									<td><input type="date"  class="form-control" name="endDate"
 										value="${requestScope.rent.end}" placeholder="endDate"
 										required="required" /></td>
 								</tr>

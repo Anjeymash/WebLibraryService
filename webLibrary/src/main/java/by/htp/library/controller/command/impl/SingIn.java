@@ -18,17 +18,23 @@ import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.factory.ServiceFactory;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class SingIn implements Command {
 	private static final Logger log = LogManager.getRootLogger();
-
+	private static final String REFERER  = "Referer";
+	/**
+	 * The method serves to retrieve the existing user-object and putting user-parameters into session
+	 */
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String login;
 		String password;
 
 		User user = null;
 		HttpSession session = request.getSession(true);
-		String referer = request.getHeader("Referer");
+		String referer = request.getHeader(REFERER);
 		login = request.getParameter(ParameterManager.USER_LOGIN);
 		password = request.getParameter(ParameterManager.USER_PASSWORD);
 		ServiceFactory factory = ServiceFactory.getInstance();
@@ -45,9 +51,8 @@ public class SingIn implements Command {
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in SingIn", e);
-			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
 		}
-
 		response.sendRedirect(referer);
 
 	}

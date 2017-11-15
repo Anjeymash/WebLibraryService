@@ -11,6 +11,10 @@ import by.htp.library.dao.connection.ConnectionPool;
 import by.htp.library.dao.exception.ConnectionPoolException;
 import by.htp.library.dao.exception.DAOException;
 
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0
+ */
 public class SQLUserDAO implements UserDAO {
 
 	private static final String UPDATE_USER = "UPDATE user SET u_login=?,u_password=?, u_name=?, u_surname=?, u_location=?, u_tel=?, u_status=?, u_email=? WHERE u_id = ?";
@@ -18,9 +22,22 @@ public class SQLUserDAO implements UserDAO {
 	private static final String SELECT_USER = "select * from user where u_login = ? and u_password = ?";
 	private static final String SELECT_BYID = "select * from user where u_id = ?";
 	private static final String SELECT_ID = "select last_insert_id() as last_id from user";
+	private static final int INDEX_ONE = 1;
+	private static final int INDEX_TWO = 2;
+	private static final int INDEX_THREE = 3;
+	private static final int INDEX_FOUR = 4;
+	private static final int INDEX_FIVE = 5;
+	private static final int INDEX_SIX = 6;
+	private static final int INDEX_SEVEN = 7;
+	private static final int INDEX_EIGHT = 8;
+	private static final int INDEX_NINE = 9;
+	private static final String LAST_ID = "last_id";
 
 	private ConnectionPool conPool = ConnectionPool.getInstance();
 
+	/**
+	 * The method returns the user-object by the pair login-password
+	 */
 	@Override
 	public User signIn(String login, String password) throws DAOException {
 		Connection con = null;
@@ -29,28 +46,37 @@ public class SQLUserDAO implements UserDAO {
 		User user = null;
 		try {
 			con = conPool.takeConnection();
-			st = con.createStatement();
-			PreparedStatement stmt = con.prepareStatement(SELECT_USER);
-			stmt.setString(1, login);
-			stmt.setString(2, password);
-			rs = stmt.executeQuery();
+			con.setAutoCommit(false);// start transaction
+			try {
+				st = con.createStatement();
+				PreparedStatement stmt = con.prepareStatement(SELECT_USER);
+				stmt.setString(INDEX_ONE, login);
+				stmt.setString(INDEX_TWO, password);
+				rs = stmt.executeQuery();
 
-			while (rs.next())
-				user = new User(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
+				while (rs.next()) {
+					user = new User(rs.getLong(INDEX_ONE), rs.getString(INDEX_TWO), rs.getString(INDEX_THREE),
+							rs.getString(INDEX_FOUR), rs.getString(INDEX_FIVE), rs.getString(INDEX_SIX),
+							rs.getString(INDEX_SEVEN), rs.getString(INDEX_EIGHT), rs.getString(INDEX_NINE));
+				}
+				con.commit();
+			} catch (SQLException e) {
+				con.rollback();
+			} finally {
+				con.setAutoCommit(true);// close transaction
+			}
 
-		} catch (SQLException e) {
+		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("SQL error", e);
-
-		} catch (ConnectionPoolException e) {
-			throw new DAOException("SQL connection error", e);
 		} finally {
 			conPool.closeConnection(con, st, rs);
 		}
 		return user;
 	}
 
-	
+	/**
+	 * The method returns the user by id
+	 */
 	@Override
 	public User fetchById(Long id) throws DAOException {
 		Statement st = null;
@@ -59,43 +85,50 @@ public class SQLUserDAO implements UserDAO {
 		User user = null;
 		try {
 			con = conPool.takeConnection();
-			st = con.createStatement();
-			PreparedStatement stmt = con.prepareStatement(SELECT_BYID);
-			stmt.setLong(1, id);
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				user = new User(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
+			con.setAutoCommit(false);// start transaction
+			try {
+				st = con.createStatement();
+				PreparedStatement stmt = con.prepareStatement(SELECT_BYID);
+				stmt.setLong(INDEX_ONE, id);
+				rs = stmt.executeQuery();
+				while (rs.next()) {
+					user = new User(rs.getLong(INDEX_ONE), rs.getString(INDEX_TWO), rs.getString(INDEX_THREE),
+							rs.getString(INDEX_FOUR), rs.getString(INDEX_FIVE), rs.getString(INDEX_SIX),
+							rs.getString(INDEX_SEVEN), rs.getString(INDEX_EIGHT), rs.getString(INDEX_NINE));
+				}
+				con.commit();
+			} catch (SQLException e) {
+				con.rollback();
+			} finally {
+				con.setAutoCommit(true);// close transaction
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("SQL error", e);
-		} catch (ConnectionPoolException e) {
-			throw new DAOException("SQL connection error", e);
 		} finally {
 			conPool.closeConnection(con, st, rs);
 		}
 		return user;
 	}
 
+	/**
+	 * The method returns the id of the updated user
+	 */
 	@Override
 	public Long updateUser(User user) throws DAOException {
-
 		PreparedStatement ps = null;
 		Connection con = null;
 		try {
 			con = conPool.takeConnection();
 			ps = con.prepareStatement(UPDATE_USER);
-			ps.setLong(9, user.getId());
-			ps.setString(1, user.getLogin());
-			ps.setString(2, user.getPassword());
-			ps.setString(3, user.getName());
-			ps.setString(4, user.getSurname());
-			ps.setString(5, user.getLocation());
-			ps.setString(6, user.getTel());
-			ps.setString(7, user.getRole());
-			ps.setString(8, user.geteMail());
+			ps.setLong(INDEX_NINE, user.getId());
+			ps.setString(INDEX_ONE, user.getLogin());
+			ps.setString(INDEX_TWO, user.getPassword());
+			ps.setString(INDEX_THREE, user.getName());
+			ps.setString(INDEX_FOUR, user.getSurname());
+			ps.setString(INDEX_FIVE, user.getLocation());
+			ps.setString(INDEX_SIX, user.getTel());
+			ps.setString(INDEX_SEVEN, user.getRole());
+			ps.setString(INDEX_EIGHT, user.geteMail());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DAOException("SQL error", e);
@@ -103,11 +136,13 @@ public class SQLUserDAO implements UserDAO {
 			throw new DAOException("SQL connection error", e);
 		} finally {
 			conPool.closeConnection(con, ps);
-			System.out.println(user.getName());
 		}
 		return user.getId();
 	}
 
+	/**
+	 * The method returns the id of the new user
+	 */
 	@Override
 	public Long saveNewUser(User user) throws DAOException {
 		PreparedStatement ps = null;
@@ -117,31 +152,36 @@ public class SQLUserDAO implements UserDAO {
 		Long id = 0L;
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(INSERT_USER);
-			ps.setString(1, user.getLogin());
-			ps.setString(2, user.getPassword());
-			ps.setString(3, user.getName());
-			ps.setString(4, user.getSurname());
-			ps.setString(5, user.getLocation());
-			ps.setInt(6, Integer.parseInt(user.getTel()));
-			ps.setString(7, user.getRole());
-			ps.setString(8, user.geteMail());
-			ps.executeUpdate();
-			st = con.createStatement();
-			rs = st.executeQuery(SELECT_ID);
-			while (rs.next())
-				id = rs.getLong("last_id");
+			con.setAutoCommit(false);// start transaction
+			try {
+				ps = con.prepareStatement(INSERT_USER);
+				ps.setString(INDEX_ONE, user.getLogin());
+				ps.setString(INDEX_TWO, user.getPassword());
+				ps.setString(INDEX_THREE, user.getName());
+				ps.setString(INDEX_FOUR, user.getSurname());
+				ps.setString(INDEX_FIVE, user.getLocation());
+				ps.setInt(INDEX_SIX, Integer.parseInt(user.getTel()));
+				ps.setString(INDEX_SEVEN, user.getRole());
+				ps.setString(INDEX_EIGHT, user.geteMail());
+				ps.executeUpdate();
+				st = con.createStatement();
+				rs = st.executeQuery(SELECT_ID);
+				while (rs.next()) {
+					id = rs.getLong(LAST_ID);
+				}
+				con.commit();
 
-		} catch (SQLException e) {
-			throw new DAOException("SQL error", e);
+			} catch (SQLException e) {
+				con.rollback();
+			} finally {
+				con.setAutoCommit(true);
+			} // close transaction
 
-		} catch (ConnectionPoolException e) {
+		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("SQL connection error", e);
 		}
-
 		finally {
 			conPool.closeConnection(con, ps, rs);
-
 		}
 		return id;
 	}

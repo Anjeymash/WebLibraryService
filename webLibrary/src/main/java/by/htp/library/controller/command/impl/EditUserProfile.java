@@ -14,14 +14,21 @@ import org.apache.logging.log4j.Logger;
 import by.htp.library.bean.User;
 import by.htp.library.controller.Command;
 import by.htp.library.controller.datamanager.JspManager;
+import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.factory.ServiceFactory;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class EditUserProfile implements Command {
 	private static final Logger log = LogManager.getRootLogger();
 
+	/**
+	 * The method serves to retrieve the user-object for the edit-user page
+	 */
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long id;
 		User user;
@@ -37,7 +44,7 @@ public class EditUserProfile implements Command {
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in EditUser", e);
-			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(page);

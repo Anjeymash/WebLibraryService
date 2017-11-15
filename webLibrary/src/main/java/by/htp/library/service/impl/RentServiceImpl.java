@@ -9,13 +9,17 @@ import by.htp.library.dao.exception.DAOException;
 import by.htp.library.dao.factory.DAOFactory;
 import by.htp.library.service.RentService;
 import by.htp.library.service.exception.ServiceException;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class RentServiceImpl implements RentService  {
-
+	/**
+	 * The method returns the id of the new rent-object
+	 */
 	@Override
 	public Long saveRent(Rent rent) throws ServiceException {
-		
-		
+				
 		try {
 			DAOFactory daoObjectFactory = DAOFactory.getInstance();
 			RentDAO rentDAO = daoObjectFactory.getRentDAO();

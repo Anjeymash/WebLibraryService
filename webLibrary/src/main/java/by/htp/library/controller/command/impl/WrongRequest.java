@@ -7,12 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import by.htp.library.controller.Command;
 import by.htp.library.controller.datamanager.JspManager;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class WrongRequest implements Command {
 
 	RequestDispatcher dispatcher = null;
-
-	@Override
+	
+	
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String page = JspManager.INDEX;

@@ -1,7 +1,16 @@
 package by.htp.library.bean;
 
-public class Book {
+import java.io.Serializable;
 
+/**
+ * Entity class serves to store book-objects with properties
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
+public class Book implements Serializable {
+
+	
+	private static final long serialVersionUID = 1L;
 	private String title;
 	private String author;
 	private String genre;
@@ -11,19 +20,18 @@ public class Book {
 	private String status;
 	private String context;
 
-	public Book() {	}
+	public Book() {
+	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Book(String title, String author, String genre, String year) {
-
-		this.title = title;
-		this.author = author;
-		this.genre = genre;
-		this.year = year;
-	}
-
-	public Book(long id, String title, String author, String genre, String year, int quantity, String status, String context) {
+	/**
+	 * Entity class-constructor for book-objects initializing
+	  */
+	
+	public Book(long id, String title, String author, String genre, String year, int quantity, String status,
+			String context) {
 		this.title = title;
 		this.author = author;
 		this.genre = genre;
@@ -153,10 +161,12 @@ public class Book {
 			return false;
 		return true;
 	}
-
+	/**
+	 *  for book-objects initializing
+	  */
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", author=" + author + " genre=" + genre + ", year=" + year + ", quantity=" + quantity
-				+ ", status=" + status + "]";
+		return "Book [id=" + id + ", title=" + title + ", author=" + author + " genre=" + genre + ", year=" + year
+				+ ", quantity=" + quantity + ", status=" + status + "]";
 	}
 }

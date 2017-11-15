@@ -33,7 +33,7 @@ public class TestBookDAO {
 	}
 	@Test
 	public void testListBook() throws DAOException {
-		List<Book> listBook= new ArrayList<>();
+		List<Book> listBook= new ArrayList<Book>();
 		bookDAO.saveBook(TEST_BOOK);
 		Assert.assertNotNull(listBook);
 	}
@@ -60,7 +60,7 @@ public class TestBookDAO {
 	
 	@Test
 	public void testSearchBook() throws DAOException {
-		List<Book> listBook= new ArrayList<>();
+		List<Book> listBook= new ArrayList<Book>();
 		listBook = bookDAO.search("Angel", "title");
 		Assert.assertNotNull(listBook);
 	}

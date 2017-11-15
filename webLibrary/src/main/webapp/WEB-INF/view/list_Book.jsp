@@ -44,7 +44,6 @@
 				</div>
 				<div class="col-md-6">
 					<div class="row">
-						<div class="btn-toolbar">
 							<div class="btn-group">
 								<form method="get" action="Controller"
 									class="navbar-form navbar-right">
@@ -73,9 +72,6 @@
 
 							</div>
 						</div>
-
-					</div>
-
 				</div>
 
 				<div class="col-md-1">
@@ -150,14 +146,16 @@
 														</button>
 													</form>
 												</td>
-												<td>
-													<form method="get" action="Controller" class="navbar-form">
-														<input type="hidden" name="command" value="addbook" />
-														<button type="submit" class="btn btn-error">
-															<fmt:message key="label.addbook" />
-														</button>
-													</form>
-												</td>
+												<c:if test="${sessionScope.userRole eq 'admin'}">
+													<td>
+														<form method="get" action="Controller" class="navbar-form">
+															<input type="hidden" name="command" value="addbook" />
+															<button type="submit" class="btn btn-error">
+																<fmt:message key="label.addbook" />
+															</button>
+														</form>
+													</td>
+												</c:if>
 											</tr>
 										</table>
 									</div>
@@ -191,8 +189,7 @@
 	<table >
 	
 		<tr>
-			<td><img src="img/ch.jpg" width="200" height="200"
-				class="img-thumbnail"></td>
+			<td><img src="img/${book.id}.jpg" width="200" height="200"></td>
 			<td><c:url var="bookinLink" value="Controller?command=bookin&id=${book.id}"></c:url>
 				<c:url var="returnLink"
 					value="Controller?command=listbook&bookGenre=${book.genre}"></c:url> <c:url

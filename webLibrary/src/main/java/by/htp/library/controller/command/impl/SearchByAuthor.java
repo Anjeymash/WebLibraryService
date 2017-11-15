@@ -18,11 +18,16 @@ import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.LibraryService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.factory.ServiceFactory;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class SearchByAuthor implements Command {
 	private static final Logger log = LogManager.getRootLogger();
 	private final static String CRITERIA = "author";
-
+	/**
+	 * The method for searching book by author
+	 */
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArrayList<Book> foundBooks = new ArrayList<>();
 		String page = JspManager.INDEX;
@@ -39,7 +44,7 @@ public class SearchByAuthor implements Command {
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in SearchByAuthor", e);
-			request.setAttribute(ParameterManager.ERROR_MES, e.getMessage());
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 		dispatcher.forward(request, response);

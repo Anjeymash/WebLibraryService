@@ -12,6 +12,10 @@ import by.htp.library.dao.connection.ConnectionPool;
 import by.htp.library.dao.exception.ConnectionPoolException;
 import by.htp.library.dao.exception.DAOException;
 
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0
+ */
 public class SQLBookDAO implements BookDAO {
 
 	private final static String SEL_BY_ID = "SELECT * FROM book WHERE (b_id=?)";
@@ -24,6 +28,15 @@ public class SQLBookDAO implements BookDAO {
 	private static final String UPDATE_BOOK = "UPDATE book SET b_title=?,b_author=?, b_genre=?, b_year=?, b_quantity=?, b_status=?, b_context=? WHERE b_id = ?";
 	private static final String DEL_BOOK = "UPDATE book SET b_status = 0 WHERE b_id=?";
 	private static final String SET_QUANT = "UPDATE book SET b_quantity =? WHERE b_id=?";
+	private static final String LAST_ID = "last_id";
+	private static final int INDEX_ONE = 1;
+	private static final int INDEX_TWO = 2;
+	private static final int INDEX_THREE = 3;
+	private static final int INDEX_FOUR = 4;
+	private static final int INDEX_FIVE = 5;
+	private static final int INDEX_SIX = 6;
+	private static final int INDEX_SEVEN = 7;
+	private static final int INDEX_EIGHT = 8;
 
 	// CRITERIA
 	private static final String TITLE_CRIT = "title";
@@ -32,6 +45,9 @@ public class SQLBookDAO implements BookDAO {
 
 	private ConnectionPool conPool = ConnectionPool.getInstance();
 
+	/**
+	 * The method makes the book inactive
+	 */
 	@Override
 	public void deleteBook(long id) throws DAOException {
 		PreparedStatement ps = null;
@@ -40,7 +56,7 @@ public class SQLBookDAO implements BookDAO {
 		try {
 			con = conPool.takeConnection();
 			ps = con.prepareStatement(DEL_BOOK);
-			ps.setLong(1, id);
+			ps.setLong(INDEX_ONE, id);
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
@@ -54,6 +70,9 @@ public class SQLBookDAO implements BookDAO {
 		}
 	}
 
+	/**
+	 * The method returns the book by id
+	 */
 	@Override
 	public Book bookById(Long id) throws DAOException {
 		Book book = null;
@@ -63,44 +82,64 @@ public class SQLBookDAO implements BookDAO {
 
 		try {
 			con = conPool.takeConnection();
-			st = con.createStatement();
-			PreparedStatement stmt = con.prepareStatement(SEL_BY_ID);
-			stmt.setLong(1, id);
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				book = new Book(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getInt(6), rs.getString(7), rs.getString(8));
+			con.setAutoCommit(false);//start transaction
+			try {
+				st = con.createStatement();
+				PreparedStatement stmt = con.prepareStatement(SEL_BY_ID);
+				stmt.setLong(INDEX_ONE, id);
+				rs = stmt.executeQuery();
+				while (rs.next()) {
+					book = new Book(rs.getLong(INDEX_ONE), rs.getString(INDEX_TWO), rs.getString(INDEX_THREE),
+							rs.getString(INDEX_FOUR), rs.getString(INDEX_FIVE), rs.getInt(INDEX_SIX),
+							rs.getString(INDEX_SEVEN), rs.getString(INDEX_EIGHT));
+				}
+				con.commit();
+			} catch (SQLException e) {
+				con.rollback();
+			} finally {
+				con.setAutoCommit(true);//close transaction
 			}
 
-		} catch (ConnectionPoolException e) {
-			throw new DAOException("SQL connection error", e);
-		} catch (SQLException e) {
+		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("SQL error", e);
+
 		} finally {
 			conPool.closeConnection(con, st, rs);
 		}
 		return book;
 	}
 
+	/**
+	 * The method returns the list of books
+	 */
 	@Override
 	public ArrayList<Book> listBook(String genre) throws DAOException {
-		return src(genre, SEL_BY_GENRE);
+		return searchByExpression(genre, SEL_BY_GENRE);
 	}
 
+	/**
+	 * The method returns the list of books by criteria and search-parameter
+	 */
 	@Override
 	public ArrayList<Book> search(String searchParam, String criteria) throws DAOException {
 		String expr = null;
-		if (criteria.equals(TITLE_CRIT))
+		if (criteria.equals(TITLE_CRIT)) {
 			expr = SEL_BY_TITLE;
-		if (criteria.equals(AUTHOR_CRIT))
+		}
+		if (criteria.equals(AUTHOR_CRIT)) {
 			expr = SEL_BY_AUTHOR;
-		if (criteria.equals(CONTEXT_CRIT))
+		}
+		if (criteria.equals(CONTEXT_CRIT)) {
 			expr = SEL_BY_CONTEXT;
-		return src('%' + searchParam + '%', expr);
+		}
+		return searchByExpression('%' + searchParam + '%', expr);
 
 	}
 
-	public ArrayList<Book> src(String searchParam, String expr) throws DAOException {
+	/**
+	 * The method returns the list of books by expression
+	 */
+	public ArrayList<Book> searchByExpression(String searchParam, String expr) throws DAOException {
 		ArrayList<Book> foundbooks = new ArrayList<>();
 		Connection con = null;
 		Statement st = null;
@@ -109,27 +148,36 @@ public class SQLBookDAO implements BookDAO {
 
 		try {
 			con = conPool.takeConnection();
-			st = con.createStatement();
-			ps = con.prepareStatement(expr);
-			ps.setString(1, searchParam);
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				foundbooks.add(new Book(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getString(5), rs.getInt(6), rs.getString(7), rs.getString(8)));
+			con.setAutoCommit(false);//start transaction
+			try {
+				st = con.createStatement();
+				ps = con.prepareStatement(expr);
+				ps.setString(INDEX_ONE, searchParam);
+				rs = ps.executeQuery();
+
+				while (rs.next()) {
+					foundbooks.add(new Book(rs.getLong(INDEX_ONE), rs.getString(INDEX_TWO), rs.getString(INDEX_THREE),
+							rs.getString(INDEX_FOUR), rs.getString(INDEX_FIVE), rs.getInt(INDEX_SIX),
+							rs.getString(INDEX_SEVEN), rs.getString(INDEX_EIGHT)));
+				}
+				con.commit();
+			} catch (SQLException e) {
+				con.rollback();
+			} finally {
+				con.setAutoCommit(true);//close transaction
 			}
-		} catch (ConnectionPoolException e) {
-			throw new DAOException("SQL connection error", e);
-		} catch (SQLException e) {
-			throw new DAOException("SQL error", e);
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException("SQL  error", e);
 
 		} finally {
 			conPool.closeConnection(con, st, rs);
 		}
-
 		return foundbooks;
-
 	}
 
+	/**
+	 * The method returns the id of the new book
+	 */
 	@Override
 	public Long saveBook(Book book) throws DAOException {
 		PreparedStatement ps = null;
@@ -140,35 +188,39 @@ public class SQLBookDAO implements BookDAO {
 
 		try {
 			con = conPool.takeConnection();
-			ps = con.prepareStatement(INSERT_BOOK);
-			ps.setString(1, book.getTitle());
-			ps.setString(2, book.getAuthor());
-			ps.setString(3, book.getGenre());
-			ps.setString(4, book.getYear());
-			ps.setInt(5, book.getQuantity());
-			ps.setString(6, book.getStatus());
-			ps.setString(7, book.getContext());
-			ps.executeUpdate();
-			st = con.createStatement();
-			rs = st.executeQuery(SELECT_ID);
-			while (rs.next())
-				id = rs.getLong("last_id");
-
-		}
-
-		catch (ConnectionPoolException e) {
-			throw new DAOException("SQL connection error", e);
-		} catch (SQLException e) {
+			con.setAutoCommit(false);//start transaction
+			try {
+				ps = con.prepareStatement(INSERT_BOOK);
+				ps.setString(INDEX_ONE, book.getTitle());
+				ps.setString(INDEX_TWO, book.getAuthor());
+				ps.setString(INDEX_THREE, book.getGenre());
+				ps.setString(INDEX_FOUR, book.getYear());
+				ps.setInt(INDEX_FIVE, book.getQuantity());
+				ps.setString(INDEX_SIX, book.getStatus());
+				ps.setString(INDEX_SEVEN, book.getContext());
+				ps.executeUpdate();
+				st = con.createStatement();
+				rs = st.executeQuery(SELECT_ID);
+				while (rs.next()) {
+					id = rs.getLong(LAST_ID);
+				}
+				con.commit();
+			} catch (SQLException e) {
+				con.rollback();
+			} finally {
+				con.setAutoCommit(true);//close transaction
+			}
+		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("SQL error", e);
-		}
-
-		finally {
+		} finally {
 			conPool.closeConnection(con, ps, rs);
-
 		}
 		return id;
 	}
 
+	/**
+	 * The method returns the id of the updated book
+	 */
 	@Override
 	public Long updateBook(Book book) throws DAOException {
 		PreparedStatement ps = null;
@@ -176,44 +228,44 @@ public class SQLBookDAO implements BookDAO {
 		try {
 			con = conPool.takeConnection();
 			ps = con.prepareStatement(UPDATE_BOOK);
-			ps.setLong(8, book.getId());
-			ps.setString(1, book.getTitle());
-			ps.setString(2, book.getAuthor());
-			ps.setString(3, book.getGenre());
-			ps.setString(4, book.getYear());
-			ps.setInt(5, book.getQuantity());
-			ps.setString(6, book.getStatus());
-			ps.setString(7, book.getContext());
+			ps.setLong(INDEX_EIGHT, book.getId());
+			ps.setString(INDEX_ONE, book.getTitle());
+			ps.setString(INDEX_TWO, book.getAuthor());
+			ps.setString(INDEX_THREE, book.getGenre());
+			ps.setString(INDEX_FOUR, book.getYear());
+			ps.setInt(INDEX_FIVE, book.getQuantity());
+			ps.setString(INDEX_SIX, book.getStatus());
+			ps.setString(INDEX_SEVEN, book.getContext());
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new DAOException("SQL error", e);
-		} catch (ConnectionPoolException e) {
-			throw new DAOException("SQL connection error", e);
-		}
 
-		finally {
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException("SQL error", e);
+		} finally {
 			conPool.closeConnection(con, ps);
-			System.out.println(book.toString());
 		}
 		return book.getId();
 	}
 
+	/**
+	 * The method reduces the amount of available books
+	 */
 	@Override
 	public void bookIn(Long id) throws DAOException {
 		PreparedStatement ps = null;
 		Connection con = null;
 		Book book;
+		int newQuantity;
 
 		try {
 			con = conPool.takeConnection();
 			book = bookById(id);
 			ps = con.prepareStatement(SET_QUANT);
-			ps.setInt(1, book.getQuantity() - 1);
-			ps.setLong(2, id);
+			newQuantity = book.getQuantity() - 1;
+			ps.setInt(INDEX_ONE, newQuantity);
+			ps.setLong(INDEX_TWO, id);
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DAOException("SQL error", e);
 		} catch (ConnectionPoolException e) {
 			throw new DAOException("SQL connection error", e);

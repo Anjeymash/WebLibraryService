@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8" errorPage="WEB-INF/jsp/error.jsp"%>
+	import="by.htp.library.bean.Book" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="language"
@@ -17,9 +17,11 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-<div class="navbar navbar-cent">
-	<h3><fmt:message key="label.bookform" /></h3>
-</div>
+	<div class="navbar navbar-cent">
+		<h3>
+			<fmt:message key="label.bookform" />
+		</h3>
+	</div>
 	<div class="navbar navbar-inverse">
 		<div class="container">
 			<div class="row">
@@ -31,7 +33,11 @@
 							<c:out value="${requestScope.errorMessage}"></c:out>
 						</div>
 					</c:if>
-
+					
+					<c:if test="${not empty book.id }">
+						<img src="img/${book.id}.jpg" width="200" height="200"
+							class="img-responsive">
+					</c:if>
 
 					<form method="post" action="Controller" class="navbar-form">
 						<input type="hidden" name="command" value="savebook" /> <input
@@ -48,7 +54,8 @@
 
 
 								<tr>
-									<td><label><fmt:message key="label.author" /> (*):</label></td>
+									<td><label><fmt:message key="label.author" />
+											(*):</label></td>
 									<td><input type="text" class="form-control"
 										name="bookAuthor" value="${requestScope.book.author}"
 										placeholder="author" required="required" /></td>
@@ -56,9 +63,13 @@
 
 								<tr>
 									<td><label><fmt:message key="label.genre" /> (*):</label></td>
-									<td><input type="text" class="form-control"
-										name="bookGenre" value="${requestScope.book.genre}"
-										placeholder="bookGenre" required="required" /></td>
+									<td><select required size="1" name="bookGenre"
+										class="form-control">
+											<option value="children"><fmt:message key="label.children" /></option>
+											<option value="scifi"><fmt:message key="label.scifi" /></option>
+											<option value="novels"><fmt:message key="label.novels" /></option>
+											<option value="adventures"><fmt:message key="label.adventures" /></option>
+									</select></td>
 								</tr>
 
 								<tr>
@@ -69,42 +80,51 @@
 								</tr>
 
 								<tr>
-									<td><label><fmt:message key="label.quantity" /> (*):</label></td>
+									<td><label><fmt:message key="label.quantity" />
+											(*):</label></td>
 									<td><input type="text" class="form-control"
 										name="bookQuantity" value="${requestScope.book.quantity}"
 										placeholder="quantity" required="required" /></td>
 								</tr>
 
 								<tr>
-									<td><label><fmt:message key="label.status" /> (*):</label></td>
-									<td><input type="text" class="form-control"
-										name="bookStatus" value="${requestScope.book.status}"
-										placeholder="status" required="required" /></td>
-								</tr>
-
+									<td><label><fmt:message key="label.status" />
+											(*):</label></td>
+									<td><select required size="1" name="bookStatus"
+										class="form-control">
+											<option value="1"><fmt:message key="label.active" /></option>
+											<option value="0"><fmt:message key="label.deleted" /></option>
+									</select></td>
 								<tr>
-									<td><label><fmt:message key="label.context" /> (*):</label></td>
+									<td><label><fmt:message key="label.context" />
+											(*):</label></td>
 									<td><textarea cols="100" rows="10" name="bookContext"
 											placeholder="context"> ${requestScope.book.context}</textarea></td>
 								</tr>
 
 
-															
-								
+
+
 								<tr>
-									<td><button class="btn btn-success" onclick="if (!(confirm('Are you sure you want to save changes?'))) return false"
-										type="submit" value="Save" class="save"><fmt:message key="label.save" /></button></td>
+									<td><button class="btn btn-success"
+											onclick="if (!(confirm('Are you sure you want to save changes?'))) return false"
+											type="submit" value="Save" class="save">
+											<fmt:message key="label.save" />
+										</button></td>
 								</tr>
-								
-								
+
+
 
 
 							</tbody>
 						</table>
 					</form>
 
-					<a href="Controller?command=listbook&bookGenre=${requestScope.book.genre}">
-						<button class="btn btn-primary"><fmt:message key="label.returntobooks" /></button>
+					<a
+						href="Controller?command=listbook&bookGenre=${requestScope.book.genre}">
+						<button class="btn btn-primary">
+							<fmt:message key="label.returntobooks" />
+						</button>
 					</a>
 				</div>
 			</div>

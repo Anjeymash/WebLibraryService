@@ -6,7 +6,11 @@ import java.util.regex.Pattern;
 import by.htp.library.bean.Book;
 import by.htp.library.bean.User;
 import by.htp.library.service.exception.ServiceException;
-
+/**
+ * Validation class serves to validate input data
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class ValidationData {
 
 	private static final Pattern P_EMAIL = Pattern.compile("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$");
@@ -20,7 +24,9 @@ public class ValidationData {
 	private static final Pattern P_AUTHOR = Pattern.compile("^[A-z0-9-]+$");
 	private static final Pattern P_GENRE = Pattern.compile("(scifi|novels|children|adventures)");
 	private static final Pattern P_STATUS = Pattern.compile("0|1");
-
+	/**
+	 * The method returns true if the input-data for creating user-object is correct
+	 */
 	public static boolean validUser(User user) throws ServiceException {
 		try {
 			if (validLogin(user.getLogin()) && validName(user.getName()) && validName(user.getSurname())
@@ -34,7 +40,9 @@ public class ValidationData {
 			throw new ServiceException("Incorrect input data");
 		}
 	}
-
+	/**
+	 * The method returns true if the input-data for creating book-object is correct
+	 */
 	public static boolean validBook(Book book) throws ServiceException {
 		try {
 			if (validString(book.getTitle()) && validString(book.getAuthor()) && validYear(book.getYear())

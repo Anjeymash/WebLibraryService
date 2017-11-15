@@ -1,6 +1,16 @@
 package by.htp.library.bean;
 
-public class User {
+import java.io.Serializable;
+
+/**
+ * Entity class serves to store user-objects with properties
+ * 
+ * @author Mashkouski Andrei
+ * @version 1.0
+ */
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private String login;
 	private String password;
 	private String name;
@@ -62,16 +72,9 @@ public class User {
 	public User() {
 	}
 
-	public User(String login, String password, String name, String role, String eMail) {
-
-		this.login = login;
-		this.password = password;
-		this.name = name;
-		this.role = role;
-		this.eMail = eMail;
-
-	}
-
+	/**
+	 * Entity class-constructor for user-objects initializing
+	 */
 	public User(Long id, String login, String password, String name, String surname, String location, String tel,
 			String role, String eMail) {
 
@@ -163,8 +166,8 @@ public class User {
 	}
 
 	public String toString() {
-		return getId() + " " + getName() + " " + getLogin() + " " + getPassword() + " " + getName() + " " + getSurname() + " "
-				+ getTel() + " " + geteMail()+" " + getLocation() + " " + getRole();
+		return getId() + " " + getName() + " " + getLogin() + " " + getPassword() + " " + getName() + " " + getSurname()
+				+ " " + getTel() + " " + geteMail() + " " + getLocation() + " " + getRole();
 	}
 
 }

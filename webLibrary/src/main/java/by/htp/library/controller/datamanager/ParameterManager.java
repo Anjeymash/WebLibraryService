@@ -1,5 +1,9 @@
 package by.htp.library.controller.datamanager;
-
+/**
+ * Class serves to initialize parameter constants
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public final class ParameterManager {
 	
 	public static final String USER_ID = "userId";
@@ -33,4 +37,6 @@ public final class ParameterManager {
 	public static final String ERROR_MES = "errorMessage";
 	public static final String MES = "message";
 	public static final String SEARCH_PARAM = "searchparam";
+	
+	public static final String COMMAND_PARAM = "command";
 }

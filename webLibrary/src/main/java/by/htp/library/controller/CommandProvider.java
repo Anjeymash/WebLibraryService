@@ -21,7 +21,11 @@ import by.htp.library.controller.command.impl.SaveRent;
 import by.htp.library.controller.command.impl.SingIn;
 import by.htp.library.controller.command.impl.SingOut;
 import by.htp.library.controller.command.impl.WrongRequest;
-
+/**
+ * Class serves to store command-objects in a repository
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class CommandProvider {
 	private final Map<CommandName, Command> repository = new HashMap<>();
 

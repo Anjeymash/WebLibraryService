@@ -19,10 +19,15 @@ import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.factory.ServiceFactory;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class SaveUser implements Command {
 	private static final Logger log = LogManager.getRootLogger();
-
+	/**
+	 * The method serves to save the user-object
+	 */
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long id;
 		User user = new User();
