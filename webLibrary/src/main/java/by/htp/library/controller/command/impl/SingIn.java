@@ -17,16 +17,20 @@ import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
+import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.factory.ServiceFactory;
+
 /**
  * @author Mashkouski Andrei
- * @version 1.0 
+ * @version 1.0
  */
 public class SingIn implements Command {
 	private static final Logger log = LogManager.getRootLogger();
-	private static final String REFERER  = "Referer";
+	private static final String REFERER = "Referer";
+
 	/**
-	 * The method serves to retrieve the existing user-object and putting user-parameters into session
+	 * The method serves to retrieve the existing user-object and putting
+	 * user-parameters into session
 	 */
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String login;
@@ -46,12 +50,16 @@ public class SingIn implements Command {
 				session.setAttribute(ParameterManager.USER_NAME, user.getName());
 				session.setAttribute(ParameterManager.USER_ID, user.getId());
 				session.setAttribute(ParameterManager.USER_ROLE, user.getRole());
-			} else
+			} else {
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.WRONG_LOG_PASS);
+			}
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in SingIn", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
+		} catch (ServiceExceptionValid e) {
+			log.error("Validation login/password error", e);
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.WRONG_LOG_PASS);
 		}
 		response.sendRedirect(referer);
 

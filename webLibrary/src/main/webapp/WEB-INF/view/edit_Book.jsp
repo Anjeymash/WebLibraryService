@@ -99,7 +99,7 @@
 									<td><label><fmt:message key="label.context" />
 											(*):</label></td>
 									<td><textarea cols="100" rows="10" name="bookContext"
-											placeholder="context"> ${requestScope.book.context}</textarea></td>
+											placeholder="bookContext"> ${requestScope.book.context}</textarea></td>
 								</tr>
 
 

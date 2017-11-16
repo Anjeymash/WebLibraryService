@@ -18,13 +18,16 @@ import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
+import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.factory.ServiceFactory;
+
 /**
  * @author Mashkouski Andrei
- * @version 1.0 
+ * @version 1.0
  */
 public class SaveUser implements Command {
 	private static final Logger log = LogManager.getRootLogger();
+
 	/**
 	 * The method serves to save the user-object
 	 */
@@ -63,12 +66,17 @@ public class SaveUser implements Command {
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in SaveUser", e);
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
+			request.setAttribute(ParameterManager.USER, user);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+			dispatcher.forward(request, response);
+		} catch (ServiceExceptionValid e) {
+			log.error("ServiceExceptionValid in SaveUser", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
 			request.setAttribute(ParameterManager.USER, user);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
 		}
-		
 
 	}
 }

@@ -14,8 +14,7 @@ import by.htp.library.controller.datamanager.JspManager;
 public class WrongRequest implements Command {
 
 	RequestDispatcher dispatcher = null;
-	
-	
+		
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String page = JspManager.INDEX;

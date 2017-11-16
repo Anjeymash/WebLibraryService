@@ -202,9 +202,18 @@
 				<h1>
 					<a href="index.jsp"><fmt:message key="label.books" /> >></a>
 
-					<c:if test="${not empty requestScope.bookGenre}">
-					${requestScope.bookGenre}
-				</c:if>
+					<c:if test="${requestScope.bookGenre eq 'children'}">
+						<fmt:message key="label.children" />
+					</c:if>
+					<c:if test="${requestScope.bookGenre eq 'scifi'}">
+						<fmt:message key="label.scifi" />
+					</c:if>
+					<c:if test="${requestScope.bookGenre eq 'novels'}">
+						<fmt:message key="label.novels" />
+					</c:if>
+					<c:if test="${requestScope.bookGenre eq 'adventures'}">
+						<fmt:message key="label.adventures" />
+					</c:if>
 				</h1>
 			</div>
 

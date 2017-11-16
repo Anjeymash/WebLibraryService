@@ -19,13 +19,15 @@ import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.LibraryService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.factory.ServiceFactory;
+
 /**
  * @author Mashkouski Andrei
- * @version 1.0 
+ * @version 1.0
  */
 public class SearchByContext implements Command {
 	private static final Logger log = LogManager.getRootLogger();
 	private final static String CRITERIA = "context";
+
 	/**
 	 * The method for searching book by context
 	 */
@@ -39,8 +41,9 @@ public class SearchByContext implements Command {
 
 		try {
 			foundBooks = libraryService.search(searchParam, CRITERIA);
-			if (foundBooks.isEmpty())
+			if (foundBooks.isEmpty()) {
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.NOT_EXIST);
+			}
 			request.setAttribute(ParameterManager.LIST_BOOK, foundBooks);
 
 		} catch (ServiceException e) {

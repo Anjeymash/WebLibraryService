@@ -45,7 +45,6 @@ public class BookIn implements Command {
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.SIGN_IN);
 
 			} else if (book.getQuantity() > nullQuantity) {
-			//	libraryService.bookIn(id);
 				book = libraryService.bookById(id);
 				request.setAttribute(ParameterManager.BOOK, book);
 				request.setAttribute(ParameterManager.BOOK_ID, id);

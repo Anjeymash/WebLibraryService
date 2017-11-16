@@ -16,6 +16,7 @@ import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.LibraryService;
 import by.htp.library.service.exception.ServiceException;
+import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.factory.ServiceFactory;
 /**
  * @author Mashkouski Andrei
@@ -42,9 +43,9 @@ public class SaveBook implements Command {
 			book.setAuthor(request.getParameter(ParameterManager.BOOK_AUTHOR));
 			book.setGenre(request.getParameter(ParameterManager.BOOK_GENRE));
 			book.setYear(request.getParameter(ParameterManager.BOOK_YEAR));
-			book.setQuantity(Integer.parseInt(request.getParameter(ParameterManager.BOOK_QUANTITY)));
 			book.setStatus(request.getParameter(ParameterManager.BOOK_STATUS));
 			book.setContext(request.getParameter(ParameterManager.BOOK_CONTEXT));
+			book.setQuantity(Integer.parseInt(request.getParameter(ParameterManager.BOOK_QUANTITY)));
 
 			ServiceFactory factory = ServiceFactory.getInstance();
 			LibraryService libraryService = factory.getLibraryService();
@@ -54,8 +55,8 @@ public class SaveBook implements Command {
 			response.sendRedirect("Controller?command=listbook&bookGenre=" + book.getGenre()+"&message="+MessageManager.ADDED);
 
 		} catch (NumberFormatException e) {
-			log.error("ServiceException in SaveBook", e);
-			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
+			log.error("NumberFormatException in SaveBook", e);
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.NUMBER_FORMAT);
 			request.setAttribute(ParameterManager.BOOK, book);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
@@ -64,6 +65,14 @@ public class SaveBook implements Command {
 		catch (ServiceException e) {
 			log.error("ServiceException in SaveBook", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
+			request.setAttribute(ParameterManager.BOOK, book);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+			dispatcher.forward(request, response);
+
+		}
+		catch (ServiceExceptionValid e) {
+			log.error("ServiceExceptionValid in SaveBook", e);
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
 			request.setAttribute(ParameterManager.BOOK, book);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);

@@ -7,7 +7,7 @@ package by.htp.library.controller.datamanager;
 public class MessageManager {
 	public static final String SIGN_IN = "you should sign in";
 	public static final String RIGHTS = "you have no rights for this operation";
-	public static final String ERROR = "validation error ";
+	public static final String ERROR = "database error ";
 	public static final String RESERVED ="book is reserved";
 	public static final String NO_BOOKS = "no available books";
 	public static final String ADDED = "book is saved";
@@ -16,5 +16,7 @@ public class MessageManager {
 	public static final String INPUT = "incorrect input";
 	public static final String WRONG_LOG_PASS = "wrong login or password";
 	public static final String JSP_ERROR = "Jsp's not found";
+	public static final String NUMBER_FORMAT = "Number format is incorrect";
+	
 	
 }

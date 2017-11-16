@@ -6,6 +6,7 @@ import by.htp.library.dao.exception.DAOException;
 import by.htp.library.dao.factory.DAOFactory;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
+import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.validation.ValidationData;
 /**
  * @author Mashkouski Andrei
@@ -15,11 +16,12 @@ public class ClientServiceImpl implements ClientService {
 	private static final int newUserId = 0;
 	/**
 	 * The method returns the user-object by the pair login-password
+	 * @throws ServiceExceptionValid 
 	 */
 	@Override
-	public User singIn(String login, String password) throws ServiceException {
+	public User singIn(String login, String password) throws ServiceException, ServiceExceptionValid {
 		if (!ValidationData.validLogin(login) || !ValidationData.validPassword(password)) {
-			throw new ServiceException("Incorrect input login or password");
+			throw new ServiceExceptionValid("Incorrect input login or password");
 		}
 
 		DAOFactory daoObjectFactory = DAOFactory.getInstance();
@@ -45,11 +47,12 @@ public class ClientServiceImpl implements ClientService {
 	}
 	/**
 	 * The method returns the id of the updated user
+	 * @throws ServiceExceptionValid 
 	 */
 	@Override
-	public Long saveUser(User user) throws ServiceException {
+	public Long saveUser(User user) throws ServiceException, ServiceExceptionValid {
 		if (!ValidationData.validUser(user)) {
-			throw new ServiceException("Incorrect input data");
+			throw new ServiceExceptionValid("Incorrect input data");
 		}
 		DAOFactory daoObjectFactory = DAOFactory.getInstance();
 		UserDAO userDAO = daoObjectFactory.getUserDAO();

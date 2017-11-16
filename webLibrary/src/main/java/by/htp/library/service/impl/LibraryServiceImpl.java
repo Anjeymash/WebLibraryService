@@ -8,6 +8,7 @@ import by.htp.library.dao.exception.DAOException;
 import by.htp.library.dao.factory.DAOFactory;
 import by.htp.library.service.LibraryService;
 import by.htp.library.service.exception.ServiceException;
+import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.validation.ValidationData;
 /**
  * @author Mashkouski Andrei
@@ -78,11 +79,12 @@ public class LibraryServiceImpl implements LibraryService {
 	}
 	/**
 	 * The method returns the id of the new book
+	 * @throws ServiceExceptionValid 
 	 */
 	@Override
-	public Long saveBook(Book book) throws ServiceException {
+	public Long saveBook(Book book) throws ServiceException, ServiceExceptionValid {
 		if (!ValidationData.validBook(book)) {
-			throw new ServiceException("Incorrect input data");
+			throw new ServiceExceptionValid("Incorrect input data");
 		}
 		try {
 			DAOFactory daoObjectFactory = DAOFactory.getInstance();
@@ -96,6 +98,7 @@ public class LibraryServiceImpl implements LibraryService {
 		} catch (DAOException e) {
 			throw new ServiceException("DAOException in saveBook ", e);
 		}
+		
 	}
 	/**
 	 * The method reduces the amount of available books

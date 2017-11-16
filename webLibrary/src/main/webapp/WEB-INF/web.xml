@@ -29,7 +29,33 @@
 		<filter-name>MyFilter</filter-name>
 		<url-pattern>*</url-pattern>
 	</filter-mapping>
-
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/view/error.jsp</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>401</error-code>
+		<location>/WEB-INF/view/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/view/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/view/error.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- Unsupported servlet method -->
+		<error-code>503</error-code>
+		<location>/WEB-INF/view/error.jsp</location>
+	</error-page>
+	<error-page>
+		<exception-type>by.htp.library.dao.exception.ConnectionPoolException</exception-type>
+		<location>/WEB-INF/view/error.jsp</location>
+	</error-page>
 
 
 </web-app>
