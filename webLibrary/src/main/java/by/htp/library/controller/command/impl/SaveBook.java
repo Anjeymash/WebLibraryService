@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.htp.library.bean.Book;
-import by.htp.library.controller.Command;
+import by.htp.library.controller.command.Command;
 import by.htp.library.controller.datamanager.JspManager;
 import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<commands>
+	<command>
+		<name>ADDBOOK</name>
+		<realization>by.htp.library.controller.command.impl.AddBook
+		</realization>
+	</command>
+	
+	<command>
+		<name>BOOKIN</name>
+		<realization>by.htp.library.controller.command.impl.BookIn
+		</realization>
+	</command>
+
+	<command>
+		<name>DELBOOK</name>
+		<realization>by.htp.library.controller.command.impl.DelBook
+		</realization>
+	</command>
+
+	<command>
+		<name>EDITBOOK</name>
+		<realization>by.htp.library.controller.command.impl.EditBook
+		</realization>
+	</command>
+
+	<command>
+		<name>EDITUSERPROFILE</name>
+		<realization>by.htp.library.controller.command.impl.EditUserProfile
+		</realization>
+	</command>
+
+	<command>
+		<name>LISTBOOK</name>
+		<realization>by.htp.library.controller.command.impl.ListBook
+		</realization>
+	</command>
+
+	<command>
+		<name>REGISTRATION</name>
+		<realization>by.htp.library.controller.command.impl.Registration
+		</realization>
+	</command>
+
+	<command>
+		<name>SAVEBOOK</name>
+		<realization>by.htp.library.controller.command.impl.SaveBook
+		</realization>
+	</command>
+
+	<command>
+		<name>SAVERENT</name>
+		<realization>by.htp.library.controller.command.impl.SaveRent
+		</realization>
+	</command>
+
+	<command>
+		<name>SAVEUSER</name>
+		<realization>by.htp.library.controller.command.impl.SaveUser
+		</realization>
+	</command>
+
+	<command>
+		<name>SEARCHBYAUTHOR</name>
+		<realization>by.htp.library.controller.command.impl.SearchByAuthor
+		</realization>
+	</command>
+
+	<command>
+		<name>SEARCHBYCONTEXT</name>
+		<realization>by.htp.library.controller.command.impl.SearchByContext
+		</realization>
+	</command>
+
+	<command>
+		<name>SEARCHBYTITLE</name>
+		<realization>by.htp.library.controller.command.impl.SearchByTitle
+		</realization>
+	</command>
+
+	<command>
+		<name>SHOWBOOK</name>
+		<realization>by.htp.library.controller.command.impl.ShowBook
+		</realization>
+	</command>
+
+	<command>
+		<name>SINGIN</name>
+		<realization>by.htp.library.controller.command.impl.SingIn
+		</realization>
+	</command>
+
+	<command>
+		<name>SINGOUT</name>
+		<realization>by.htp.library.controller.command.impl.SingOut
+		</realization>
+	</command>
+
+	<command>
+		<name>WRONGREQUEST</name>
+		<realization>by.htp.library.controller.command.impl.WrongRequest
+		</realization>
+	</command>
+
+</commands>

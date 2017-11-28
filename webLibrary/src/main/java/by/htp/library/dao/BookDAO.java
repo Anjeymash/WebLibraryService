@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import by.htp.library.bean.Book;
 import by.htp.library.dao.exception.DAOException;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public interface BookDAO {
         void deleteBook(long id) throws DAOException;
         Book bookById(Long id)throws DAOException;

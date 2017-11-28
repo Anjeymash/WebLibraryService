@@ -81,6 +81,7 @@
 									<td><input type="date" class="form-control"
 										name="startDate" value="${requestScope.rent.start}"
 										placeholder="startDate" required="required" /></td>
+										
 								</tr>
 
 

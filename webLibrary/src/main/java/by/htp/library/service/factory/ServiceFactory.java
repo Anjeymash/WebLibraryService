@@ -6,7 +6,10 @@ import by.htp.library.service.RentService;
 import by.htp.library.service.impl.ClientServiceImpl;
 import by.htp.library.service.impl.LibraryServiceImpl;
 import by.htp.library.service.impl.RentServiceImpl;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class ServiceFactory {
 	private static final ServiceFactory instance = new ServiceFactory();
 	private final LibraryService libraryService = new LibraryServiceImpl();

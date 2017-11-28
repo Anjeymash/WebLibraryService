@@ -1,9 +1,8 @@
-package by.htp.library.controller;
+package by.htp.library.controller.command;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import by.htp.library.controller.command.CommandName;
 import by.htp.library.controller.command.impl.AddBook;
 import by.htp.library.controller.command.impl.BookIn;
 import by.htp.library.controller.command.impl.DelBook;

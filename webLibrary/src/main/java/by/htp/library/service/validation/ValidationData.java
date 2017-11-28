@@ -4,12 +4,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import by.htp.library.bean.Book;
+import by.htp.library.bean.Rent;
 import by.htp.library.bean.User;
-import by.htp.library.service.exception.ServiceException;
+
+import by.htp.library.service.exception.ServiceExceptionValid;
+
 /**
  * Validation class serves to validate input data
+ * 
  * @author Mashkouski Andrei
- * @version 1.0 
+ * @version 1.0
  */
 public class ValidationData {
 
@@ -24,10 +28,15 @@ public class ValidationData {
 	private static final Pattern P_AUTHOR = Pattern.compile("^[A-z0-9-]+$");
 	private static final Pattern P_GENRE = Pattern.compile("(scifi|novels|children|adventures)");
 	private static final Pattern P_STATUS = Pattern.compile("0|1");
+	private static final int MAX_QUANT = 999999;
+	private static final int MIN_QUANT = 0;
+
 	/**
 	 * The method returns true if the input-data for creating user-object is correct
+	 * 
+	 * @throws ServiceExceptionValid
 	 */
-	public static boolean validUser(User user) throws ServiceException {
+	public static boolean validUser(User user) throws ServiceExceptionValid {
 		try {
 			if (validLogin(user.getLogin()) && validName(user.getName()) && validName(user.getSurname())
 					&& validPassword(user.getPassword()) && validLocation(user.getLocation()) && validTel(user.getTel())
@@ -37,23 +46,41 @@ public class ValidationData {
 				return false;
 			}
 		} catch (NullPointerException e) {
-			throw new ServiceException("Incorrect input data");
+			throw new ServiceExceptionValid("Incorrect input data");
 		}
 	}
+
 	/**
 	 * The method returns true if the input-data for creating book-object is correct
+	 * 
+	 * @throws ServiceExceptionValid
 	 */
-	public static boolean validBook(Book book) throws ServiceException {
+	public static boolean validBook(Book book) throws ServiceExceptionValid {
 		try {
 			if (validString(book.getTitle()) && validString(book.getAuthor()) && validYear(book.getYear())
 					&& validGenre(book.getGenre()) && validQuantity(book.getQuantity()) && validStatus(book.getStatus())
 					&& validString(book.getContext())) {
-				return true;
-			} else
+				{
+					return true;
+				}
+			} else {
 				return false;
+			}
 
 		} catch (NullPointerException e) {
-			throw new ServiceException("Incorrect input data");
+			throw new ServiceExceptionValid("Incorrect input data");
+		}
+	}
+
+	public static boolean validRent(Rent rent) throws ServiceExceptionValid {
+		try {
+			if (rent.getStart().getTime() > rent.getEnd().getTime()) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (NullPointerException e) {
+			throw new ServiceExceptionValid("Incorrect input data");
 		}
 	}
 
@@ -73,7 +100,7 @@ public class ValidationData {
 	}
 
 	public static boolean validQuantity(int quantity) {
-		if ((quantity < 0) || (quantity > 99999)) {
+		if ((quantity < MIN_QUANT) || (quantity > MAX_QUANT)) {
 			return false;
 		}
 		return true;

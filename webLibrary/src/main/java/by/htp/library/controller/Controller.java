@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import by.htp.library.controller.command.Command;
+import by.htp.library.controller.command.CommandProviderXML;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.dao.connection.ConnectionPool;
 import by.htp.library.dao.exception.ConnectionPoolException;
@@ -17,7 +20,7 @@ import by.htp.library.dao.exception.ConnectionPoolException;
  */
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final CommandProvider provider = new CommandProvider();
+	private static final CommandProviderXML provider = new CommandProviderXML();
 	private static final Logger log = LogManager.getRootLogger();
 
 	public Controller() {

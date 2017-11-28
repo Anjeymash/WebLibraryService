@@ -1,6 +1,5 @@
 package by.htp.library.bean;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,9 +7,8 @@ import java.util.Date;
  * @author Mashkouski Andrei
  * @version 1.0 
  */
-public class Rent implements Serializable{
+public class Rent {
 
-	private static final long serialVersionUID = 1L;
 	private long rentId;
 	private long bookId;
 	private long userId;

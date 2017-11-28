@@ -1,5 +1,8 @@
 package by.htp.library.dao.connection.manager;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public final class DBParameter {
 	private DBParameter() {}
 	public static final String DB_DRIVER = "db.driver";

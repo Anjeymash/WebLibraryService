@@ -6,7 +6,10 @@ import by.htp.library.dao.UserDAO;
 import by.htp.library.dao.impl.SQLBookDAO;
 import by.htp.library.dao.impl.SQLRentDAO;
 import by.htp.library.dao.impl.SQLUserDAO;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public class DAOFactory {
 	private static final DAOFactory instance = new DAOFactory();
 	private final BookDAO sqlBookImpl = new SQLBookDAO();

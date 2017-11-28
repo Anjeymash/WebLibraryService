@@ -5,7 +5,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import by.htp.library.controller.Command;
+
+import by.htp.library.controller.command.Command;
 import by.htp.library.controller.datamanager.JspManager;
 /**
  * @author Mashkouski Andrei

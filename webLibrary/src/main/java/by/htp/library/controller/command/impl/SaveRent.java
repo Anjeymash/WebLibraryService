@@ -13,21 +13,24 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import by.htp.library.bean.Book;
 import by.htp.library.bean.Rent;
-import by.htp.library.controller.Command;
+import by.htp.library.controller.command.Command;
 import by.htp.library.controller.datamanager.JspManager;
 import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.LibraryService;
 import by.htp.library.service.RentService;
 import by.htp.library.service.exception.ServiceException;
+import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.factory.ServiceFactory;
+
 /**
  * @author Mashkouski Andrei
- * @version 1.0 
+ * @version 1.0
  */
 public class SaveRent implements Command {
 	private static final Logger log = LogManager.getRootLogger();
 	private static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy-mm-dd");
+
 	/**
 	 * The method serves to retrieve the rent-object for saving
 	 */
@@ -74,8 +77,9 @@ public class SaveRent implements Command {
 			request.setAttribute(ParameterManager.BOOK, book);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
-		} catch (ParseException e) {
-			log.error("ParseException in ShowBook", e);
+		
+		} catch (ServiceExceptionValid|ParseException e) {
+			log.error("ServiceExceptionValid in SaveUser", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
 			request.setAttribute(ParameterManager.BOOK, book);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(page);

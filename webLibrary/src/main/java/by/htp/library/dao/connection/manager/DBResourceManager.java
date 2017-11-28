@@ -1,7 +1,10 @@
 package by.htp.library.dao.connection.manager;
 
 import java.util.ResourceBundle;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public final class DBResourceManager {
 	private static DBResourceManager instance = null;
 	private final ResourceBundle bundle = ResourceBundle.getBundle("database");

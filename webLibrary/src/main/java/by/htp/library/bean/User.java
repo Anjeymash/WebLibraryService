@@ -1,6 +1,5 @@
 package by.htp.library.bean;
 
-import java.io.Serializable;
 
 /**
  * Entity class serves to store user-objects with properties
@@ -8,9 +7,8 @@ import java.io.Serializable;
  * @author Mashkouski Andrei
  * @version 1.0
  */
-public class User implements Serializable {
+public class User {
 
-	private static final long serialVersionUID = 1L;
 	private String login;
 	private String password;
 	private String name;

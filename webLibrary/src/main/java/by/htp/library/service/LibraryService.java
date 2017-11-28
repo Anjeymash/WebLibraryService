@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import by.htp.library.bean.Book;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.exception.ServiceExceptionValid;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0 
+ */
 public interface LibraryService {
 void delBook(long bookID) throws ServiceException;
 ArrayList<Book> search(String searchparam, String criteria) throws ServiceException;

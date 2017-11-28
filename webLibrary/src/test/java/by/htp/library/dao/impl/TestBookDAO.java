@@ -13,7 +13,10 @@ import by.htp.library.dao.connection.ConnectionPool;
 import by.htp.library.dao.exception.ConnectionPoolException;
 import by.htp.library.dao.exception.DAOException;
 import by.htp.library.dao.factory.DAOFactory;
-
+/**
+ * @author Mashkouski Andrei
+ * @version 1.0
+ */
 public class TestBookDAO {
 	private DAOFactory factory = DAOFactory.getInstance();
 	private BookDAO bookDAO = factory.getBookDAO();
