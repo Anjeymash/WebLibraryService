@@ -19,23 +19,11 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 
 </head>
-
-</head>
-
-
 <body>
-
-
 	<div class="navbar navbar-inverse">
-
 		<div class="container">
-
-
 			<div class="row">
-
 				<div class="navbar-header">
-
-
 					<ul class="nav navbar-nav">
 						<li><a href="index.jsp"><fmt:message key="label.main" />
 						</a></li>
@@ -45,7 +33,6 @@
 						<li><a
 							href="https://www.linkedin.com/in/andrey-mashkouski-6079a7101"><fmt:message
 									key="label.contacts" /> </a></li>
-
 					</ul>
 				</div>
 				<div class="col-md-6">
@@ -69,25 +56,16 @@
 							<form class="navbar-form navbar-right">
 								<select required size="1" class="form-control" id="language"
 									name="language" onchange="submit()">
-
 									<option value="ru" ${language == 'ru' ? 'selected' : ''}>Русский</option>
 									<option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
 								</select>
-
 							</form>
-
-
 						</div>
-
-
 					</div>
-
 				</div>
 
 				<div class="col-md-1">
-
 					<c:if test="${empty sessionScope.userId }">
-
 						<div class="btn-toolbar">
 							<div class="btn-group">
 								<table>
@@ -108,7 +86,6 @@
 											</form>
 										</td>
 										<td>
-
 											<div class="btn-group">
 												<form method="get" action="Controller"
 													class="navbar-form navbar-right">
@@ -117,25 +94,19 @@
 														<fmt:message key="label.registration" />
 													</button>
 												</form>
-
 											</div>
-
 										</td>
 									</tr>
 								</table>
 							</div>
 						</div>
-
 					</c:if>
 
 					<c:if test="${not empty sessionScope.userId }">
-
 						<div class="col-md-6">
 							<div class="row">
-
 								<div class="btn-toolbar">
 									<div class="btn-group">
-
 										<table>
 											<tr>
 												<td>${sessionScope.userName}</td>
@@ -217,18 +188,12 @@
 				</h1>
 			</div>
 
-
-
 			<div class="row">
 				<div class="col-md-8">
-
 					<c:if test="${empty requestScope.listbook }">
-
 						<br />
-
 						<div class="container">
 							<table>
-
 								<tr>
 									<td>
 										<div class="row">
@@ -237,7 +202,6 @@
 													<img
 														src="https://s3-images.ozstatic.by/landing/1400/575/833/2335/2335833575_0_1509801768.jpg"
 														class="img-responsive">
-
 												</p>
 											</div>
 											<div class="col-md-7">
@@ -255,7 +219,6 @@
 											</div>
 										</div>
 									</td>
-
 									<td>
 										<div class="row">
 											<div class="col-md-7">
@@ -288,8 +251,6 @@
 													<img
 														src="https://s4-images.ozstatic.by/landing/1400/257/974/4231/4231974257_0_1510214775.jpg"
 														class="img-responsive">
-
-
 												</p>
 											</div>
 											<div class="col-md-7">
@@ -314,7 +275,6 @@
 													<img
 														src="https://s1-images.ozstatic.by/landing/1400/741/179/305/305179741_0_1507281074.jpg"
 														class="img-responsive">
-
 												</p>
 											</div>
 											<div class="col-md-7">
@@ -332,18 +292,13 @@
 											</div>
 										</div>
 									</td>
-
 								</tr>
-
 							</table>
-
 						</div>
-
 					</c:if>
 				</div>
 
 				<c:if test="${not empty requestScope.listbook }">
-
 					<table class="table">
 						<tr>
 							<th></th>
@@ -355,27 +310,12 @@
 						</tr>
 						<c:forEach var="book" items="${requestScope.listbook}">
 							<tr>
-
 								<td><img src="img/${book.id}.jpg" width="100" height="100"></td>
 								<td>${book.title}</td>
 								<td>${book.author}</td>
 								<td>${book.genre}</td>
 								<td>${book.year}</td>
 								<td>${book.quantity}</td>
-
-
-								<!-- <td>
-										<form method="get" action="Controller">
-											<input type="hidden" name="command" value="lookbook" /> 
-												<!--  type="hidden" name="user_id" value="${book.id}" />
-											<input type="hidden" name="title" value="${book.title}" />
-											<input type="hidden" name="author"
-												value="${book.author}" /> <input type="hidden"
-												name="year" value="${book.year}" /> <input
-												type="hidden" name="genre" value="${book.genre}" />
-											<button type="submit" class="btn btn-success">Details</button>
-										</form> 
-									</td>-->
 
 								<td><c:url var="viewLink"
 										value="Controller?command=showbook">
@@ -399,8 +339,6 @@
 												<fmt:message key="label.del" />
 											</button></a>
 									</c:if></td>
-
-
 							</tr>
 						</c:forEach>
 					</table>
@@ -411,7 +349,6 @@
 			<div class="col-md-4"></div>
 		</div>
 
-
 		<div class="navbar navbar-cent">
 			<h2>
 				<c:forEach begin="1" end="${requestScope.limit}" var="i">
@@ -421,28 +358,24 @@
 						<c:param name="page" value="${i}" />
 					</c:url>
 
-					<%-- <c:if test="${not empty requestScope.listbook}"> --%>
-						<c:choose>
-							<c:when test="${i eq requestScope.page}">
-								<a href="${pagin}"><b>${i}</b></a>
-							</c:when>
-							<c:otherwise>
-								<a href="${pagin}">${i}</a>
-							</c:otherwise>
-						</c:choose>
-					<%-- </c:if> --%>
+					<c:choose>
+						<c:when test="${i eq requestScope.page}">
+							<a href="${pagin}"><b>${i}</b></a>
+						</c:when>
+						<c:otherwise>
+							<a href="${pagin}">${i}</a>
+						</c:otherwise>
+					</c:choose>
 
 				</c:forEach>
 			</h2>
 		</div>
 	</div>
-
 	<div class="navbar navbar-fixed-bottom">
 		<div class="navbar navbar-inverse">
 			<h5>Copyright Anjeymash 2017. All rights reserved</h5>
 		</div>
 	</div>
 </body>
-
 </html>
 

@@ -29,8 +29,7 @@ import by.htp.library.service.factory.ServiceFactory;
  */
 public class SingIn implements Command {
 	private static final Logger log = LogManager.getRootLogger();
-	private static final String REFERER = "Referer";
-
+	
 	/**
 	 * The method serves to retrieve the existing user-object and putting
 	 * user-parameters into session
@@ -43,7 +42,6 @@ public class SingIn implements Command {
 
 		User user = null;
 		HttpSession session = request.getSession(true);
-		//String referer = request.getHeader(REFERER);
 		login = request.getParameter(ParameterManager.USER_LOGIN);
 		password = request.getParameter(ParameterManager.USER_PASSWORD);
 		ServiceFactory factory = ServiceFactory.getInstance();
@@ -55,7 +53,7 @@ public class SingIn implements Command {
 				session.setAttribute(ParameterManager.USER_NAME, user.getName());
 				session.setAttribute(ParameterManager.USER_ID, user.getId());
 				session.setAttribute(ParameterManager.USER_ROLE, user.getRole());
-				//page = referer;
+
 			} else {
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.WRONG_LOG_PASS);
 			}

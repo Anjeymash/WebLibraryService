@@ -3,7 +3,7 @@ package by.htp.library.bean;
 import java.io.Serializable;
 
 /**
- * Entity class serves for pagination of search results 
+ * Entity class serves for pagination of search results
  * 
  * @author Mashkouski Andrei
  * @version 1.0
