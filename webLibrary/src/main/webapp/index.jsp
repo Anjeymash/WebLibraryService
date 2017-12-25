@@ -217,7 +217,7 @@
 				</h1>
 			</div>
 
-		
+
 
 			<div class="row">
 				<div class="col-md-8">
@@ -410,18 +410,38 @@
 
 			<div class="col-md-4"></div>
 		</div>
+
+
+		<div class="navbar navbar-cent">
+			<h2>
+				<c:forEach begin="1" end="${requestScope.limit}" var="i">
+					<c:url var="pagin" value="Controller">
+						<c:param name="command" value="listbook" />
+						<c:param name="bookGenre" value="${requestScope.bookGenre}" />
+						<c:param name="page" value="${i}" />
+					</c:url>
+
+					<%-- <c:if test="${not empty requestScope.listbook}"> --%>
+						<c:choose>
+							<c:when test="${i eq requestScope.page}">
+								<a href="${pagin}"><b>${i}</b></a>
+							</c:when>
+							<c:otherwise>
+								<a href="${pagin}">${i}</a>
+							</c:otherwise>
+						</c:choose>
+					<%-- </c:if> --%>
+
+				</c:forEach>
+			</h2>
+		</div>
 	</div>
-
-
 
 	<div class="navbar navbar-fixed-bottom">
 		<div class="navbar navbar-inverse">
 			<h5>Copyright Anjeymash 2017. All rights reserved</h5>
 		</div>
 	</div>
-
-
-
 </body>
 
 </html>

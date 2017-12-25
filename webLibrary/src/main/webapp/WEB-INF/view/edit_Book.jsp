@@ -75,7 +75,7 @@
 								<tr>
 									<td><label><fmt:message key="label.year" /> (*):</label></td>
 									<td><input type="text" class="form-control"
-										name="bookYear" value="${requestScope.book.year}"
+										name="bookYear" title="xxxx" pattern="[0-9]{4}" value="${requestScope.book.year}"
 										placeholder="year" required="required" /></td>
 								</tr>
 
@@ -83,7 +83,7 @@
 									<td><label><fmt:message key="label.quantity" />
 											(*):</label></td>
 									<td><input type="text" class="form-control"
-										name="bookQuantity" value="${requestScope.book.quantity}"
+										name="bookQuantity" title="0<<<99999" pattern="^[1-9]\d*$" value="${requestScope.book.quantity}"
 										placeholder="quantity" required="required" /></td>
 								</tr>
 
@@ -102,9 +102,6 @@
 											placeholder="bookContext"> ${requestScope.book.context}</textarea></td>
 								</tr>
 
-
-
-
 								<tr>
 									<td><button class="btn btn-success"
 											onclick="if (!(confirm('Are you sure you want to save changes?'))) return false"
@@ -112,9 +109,6 @@
 											<fmt:message key="label.save" />
 										</button></td>
 								</tr>
-
-
-
 
 							</tbody>
 						</table>

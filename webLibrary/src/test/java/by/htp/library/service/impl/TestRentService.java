@@ -8,7 +8,10 @@ import by.htp.library.service.RentService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.factory.ServiceFactory;
-/**Test class for RentService
+
+/**
+ * Test class for RentService
+ * 
  * @author Mashkouski Andrei
  * @version 1.0
  */

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import by.htp.library.bean.Book;
+import by.htp.library.bean.Pagination;
 import by.htp.library.dao.BookDAO;
 import by.htp.library.dao.connection.ConnectionPool;
 import by.htp.library.dao.exception.ConnectionPoolException;
@@ -19,7 +20,8 @@ import by.htp.library.dao.exception.DAOException;
 public class SQLBookDAO implements BookDAO {
 
 	private final static String SEL_BY_ID = "SELECT * FROM book WHERE (b_id=?)";
-	private final static String SEL_BY_GENRE = "SELECT * FROM book WHERE (b_genre=?) AND (b_status=1)";
+	private final static String SEL = "SELECT * FROM book WHERE (b_genre=?) AND (b_status=1)";
+	private final static String SEL_BY_GENRE = "SELECT * FROM book WHERE (b_genre=?) AND (b_status=1) LIMIT ?,?";
 	private final static String SEL_BY_TITLE = "SELECT * FROM book WHERE (b_title LIKE ?)AND (b_status=1)";
 	private final static String SEL_BY_AUTHOR = "SELECT * FROM book WHERE (b_author LIKE ?)AND (b_status=1)";
 	private final static String SEL_BY_CONTEXT = "SELECT * FROM book WHERE (b_context LIKE ?)AND (b_status=1)";
@@ -44,6 +46,7 @@ public class SQLBookDAO implements BookDAO {
 	private static final String CONTEXT_CRIT = "context";
 
 	private ConnectionPool conPool = ConnectionPool.getInstance();
+	private Pagination pagin;
 
 	/**
 	 * The method makes the book inactive
@@ -82,7 +85,7 @@ public class SQLBookDAO implements BookDAO {
 
 		try {
 			con = conPool.takeConnection();
-			con.setAutoCommit(false);//start transaction
+			con.setAutoCommit(false);// start transaction
 			try {
 				st = con.createStatement();
 				PreparedStatement stmt = con.prepareStatement(SEL_BY_ID);
@@ -97,7 +100,7 @@ public class SQLBookDAO implements BookDAO {
 			} catch (SQLException e) {
 				con.rollback();
 			} finally {
-				con.setAutoCommit(true);//close transaction
+				con.setAutoCommit(true);// close transaction
 			}
 
 		} catch (ConnectionPoolException | SQLException e) {
@@ -113,8 +116,8 @@ public class SQLBookDAO implements BookDAO {
 	 * The method returns the list of books
 	 */
 	@Override
-	public ArrayList<Book> listBook(String genre) throws DAOException {
-		return searchByExpression(genre, SEL_BY_GENRE);
+	public ArrayList<Book> listBook(String genre, int pageId) throws DAOException {
+		return searchByGenre(genre, SEL_BY_GENRE, pageId);
 	}
 
 	/**
@@ -139,8 +142,46 @@ public class SQLBookDAO implements BookDAO {
 	/**
 	 * The method returns the list of books by expression
 	 */
+
 	public ArrayList<Book> searchByExpression(String searchParam, String expr) throws DAOException {
 		ArrayList<Book> foundbooks = new ArrayList<>();
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		try {
+			con = conPool.takeConnection();
+			con.setAutoCommit(false);// start transaction
+			try {
+				st = con.createStatement();
+				ps = con.prepareStatement(expr);
+				ps.setString(INDEX_ONE, searchParam);
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					foundbooks.add(new Book(rs.getLong(INDEX_ONE), rs.getString(INDEX_TWO), rs.getString(INDEX_THREE),
+							rs.getString(INDEX_FOUR), rs.getString(INDEX_FIVE), rs.getInt(INDEX_SIX),
+							rs.getString(INDEX_SEVEN), rs.getString(INDEX_EIGHT)));
+				}
+				con.commit();
+			} catch (SQLException e) {
+				con.rollback();
+			} finally {
+				con.setAutoCommit(true);// close transaction
+			}
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException("SQL  error", e);
+		} finally {
+			conPool.closeConnection(con, st, rs);
+		}
+		return foundbooks;
+	}
+
+	/**
+	 * The method returns the list of books by genre for the selected page
+	 */
+	public ArrayList<Book> searchByGenre(String searchParam, String expr, int pageId) throws DAOException {
+		ArrayList<Book> foundbooks = new ArrayList<>();
+		setPagin(new Pagination(pageId, getRecords(searchParam)));
 		Connection con = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -148,11 +189,14 @@ public class SQLBookDAO implements BookDAO {
 
 		try {
 			con = conPool.takeConnection();
-			con.setAutoCommit(false);//start transaction
+			con.setAutoCommit(false);// start transaction
 			try {
 				st = con.createStatement();
 				ps = con.prepareStatement(expr);
+
 				ps.setString(INDEX_ONE, searchParam);
+				ps.setInt(INDEX_TWO, pagin.getOffset());
+				ps.setInt(INDEX_THREE, Pagination.getLinesLimit());
 				rs = ps.executeQuery();
 
 				while (rs.next()) {
@@ -164,7 +208,7 @@ public class SQLBookDAO implements BookDAO {
 			} catch (SQLException e) {
 				con.rollback();
 			} finally {
-				con.setAutoCommit(true);//close transaction
+				con.setAutoCommit(true);// close transaction
 			}
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("SQL  error", e);
@@ -188,7 +232,7 @@ public class SQLBookDAO implements BookDAO {
 
 		try {
 			con = conPool.takeConnection();
-			con.setAutoCommit(false);//start transaction
+			con.setAutoCommit(false);// start transaction
 			try {
 				ps = con.prepareStatement(INSERT_BOOK);
 				ps.setString(INDEX_ONE, book.getTitle());
@@ -208,7 +252,7 @@ public class SQLBookDAO implements BookDAO {
 			} catch (SQLException e) {
 				con.rollback();
 			} finally {
-				con.setAutoCommit(true);//close transaction
+				con.setAutoCommit(true);// close transaction
 			}
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("SQL error", e);
@@ -273,6 +317,37 @@ public class SQLBookDAO implements BookDAO {
 			conPool.closeConnection(con, ps);
 		}
 
+	}
+
+	@Override
+	public int getRecords(String genre) throws DAOException {
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+
+		try {
+			con = conPool.takeConnection();
+			ps = con.prepareStatement(SEL);
+			ps.setString(INDEX_ONE, genre);
+			rs = ps.executeQuery();
+			rs.last();
+			return rs.getRow();
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException("SQL error", e);
+		} finally {
+			conPool.closeConnection(con, ps);
+		}
+
+	}
+
+	@Override
+	public Pagination getPagin() {
+		return pagin;
+	}
+
+	public void setPagin(Pagination pagin) {
+		this.pagin = pagin;
 	}
 
 }

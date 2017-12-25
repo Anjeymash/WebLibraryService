@@ -17,9 +17,11 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-<div class="navbar navbar-cent">
-	<h3><fmt:message key="label.userprofile" /></h3>
-</div>
+	<div class="navbar navbar-cent">
+		<h3>
+			<fmt:message key="label.userprofile" />
+		</h3>
+	</div>
 	<div class="navbar navbar-inverse">
 		<div class="container">
 			<div class="row">
@@ -56,14 +58,16 @@
 								</tr>
 
 								<tr>
-									<td><label><fmt:message key="label.surname" /> (*):</label></td>
+									<td><label><fmt:message key="label.surname" />
+											(*):</label></td>
 									<td><input type="text" class="form-control"
 										name="userSurName" value="${requestScope.user.surname}"
 										placeholder="surname" required="required" /></td>
 								</tr>
 
 								<tr>
-									<td><label><fmt:message key="label.password" /> (*):</label></td>
+									<td><label><fmt:message key="label.password" />
+											(*):</label></td>
 									<td><input type="text" class="form-control"
 										name="userPassword" value="${requestScope.user.password}"
 										placeholder="password" required="required" /></td>
@@ -71,29 +75,34 @@
 
 								<tr>
 									<td><label><fmt:message key="label.email" /> (*):</label></td>
-									<td><input type="text" class="form-control"
+									<td><input type="email" title="xx@xx.xx" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
 										name="userEMail" value="${requestScope.user.eMail}"
 										placeholder="eMail" required="required" /></td>
 								</tr>
 
 								<tr>
-									<td><label><fmt:message key="label.tel" /> (*):</label></td>
-									<td><input type="text" class="form-control"
+									<td><label><fmt:message key="label.tel" /> (*)
+											+375-xx-xxx-xx-xx:</label></td>
+									<td><input type="text" title="xx-xxx-xx-xx" class="form-control" pattern="[0-9]{9}"
 										name="userTelNumber" value="${requestScope.user.tel}"
-										placeholder="tel" required="required" /></td>
+										placeholder="xx-xxx-xx-xx" required="required" /></td>
 								</tr>
 
 								<tr>
-									<td><label><fmt:message key="label.location" /> (*):</label></td>
+									<td><label><fmt:message key="label.location" />
+											(*):</label></td>
 									<td><input type="text" class="form-control"
 										name="userLocation" value="${requestScope.user.location}"
 										placeholder="location" required="required" /></td>
 								</tr>
 
-								
+
 								<tr>
-									<td><button class="btn btn-success" onclick="if (!(confirm('Are you sure you want to save changes?'))) return false"
-										type="submit" value="Save" class="save"><fmt:message key="label.save" /></button></td>
+									<td><button class="btn btn-success"
+											onclick="if (!(confirm('Are you sure you want to save changes?'))) return false"
+											type="submit" value="Save" class="save">
+											<fmt:message key="label.save" />
+										</button></td>
 								</tr>
 
 
@@ -102,10 +111,12 @@
 					</form>
 
 					<a href="index.jsp">
-						<button class="btn btn-primary"><fmt:message key="label.return" /></button>
+						<button class="btn btn-primary">
+							<fmt:message key="label.return" />
+						</button>
 					</a>
-					
-					
+
+
 				</div>
 			</div>
 		</div>

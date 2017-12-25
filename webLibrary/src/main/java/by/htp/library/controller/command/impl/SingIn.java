@@ -1,6 +1,8 @@
 package by.htp.library.controller.command.impl;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 //import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.htp.library.bean.User;
 import by.htp.library.controller.command.Command;
+import by.htp.library.controller.datamanager.JspManager;
 //import by.htp.library.controller.datamanager.JspManager;
 import by.htp.library.controller.datamanager.MessageManager;
 import by.htp.library.controller.datamanager.ParameterManager;
@@ -35,10 +38,12 @@ public class SingIn implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String login;
 		String password;
+		String page = JspManager.INDEX;
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 
 		User user = null;
 		HttpSession session = request.getSession(true);
-		String referer = request.getHeader(REFERER);
+		//String referer = request.getHeader(REFERER);
 		login = request.getParameter(ParameterManager.USER_LOGIN);
 		password = request.getParameter(ParameterManager.USER_PASSWORD);
 		ServiceFactory factory = ServiceFactory.getInstance();
@@ -50,6 +55,7 @@ public class SingIn implements Command {
 				session.setAttribute(ParameterManager.USER_NAME, user.getName());
 				session.setAttribute(ParameterManager.USER_ID, user.getId());
 				session.setAttribute(ParameterManager.USER_ROLE, user.getRole());
+				//page = referer;
 			} else {
 				request.setAttribute(ParameterManager.ERROR_MES, MessageManager.WRONG_LOG_PASS);
 			}
@@ -57,11 +63,13 @@ public class SingIn implements Command {
 		} catch (ServiceException e) {
 			log.error("ServiceException in SingIn", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
+
 		} catch (ServiceExceptionValid e) {
 			log.error("Validation login/password error", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.WRONG_LOG_PASS);
-		}
-		response.sendRedirect(referer);
 
+		}
+
+		dispatcher.forward(request, response);
 	}
 }

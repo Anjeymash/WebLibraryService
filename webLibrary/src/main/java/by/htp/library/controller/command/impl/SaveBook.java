@@ -32,6 +32,7 @@ public class SaveBook implements Command {
 		Book book = new Book();
 		String page;
 		page = JspManager.EDIT_BOOK;
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 
 		// checking: new or existing
 		if ((request.getParameter(ParameterManager.BOOK_ID) != null)
@@ -58,7 +59,6 @@ public class SaveBook implements Command {
 			log.error("NumberFormatException in SaveBook", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.NUMBER_FORMAT);
 			request.setAttribute(ParameterManager.BOOK, book);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
 		}
 
@@ -66,7 +66,6 @@ public class SaveBook implements Command {
 			log.error("ServiceException in SaveBook", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
 			request.setAttribute(ParameterManager.BOOK, book);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
 
 		}
@@ -74,7 +73,6 @@ public class SaveBook implements Command {
 			log.error("ServiceExceptionValid in SaveBook", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
 			request.setAttribute(ParameterManager.BOOK, book);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
 
 		}

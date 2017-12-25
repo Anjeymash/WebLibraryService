@@ -12,4 +12,6 @@ public interface UserDAO {
 	User fetchById(Long id) throws DAOException;
 	Long updateUser(User user) throws DAOException;
 	Long saveNewUser(User user) throws DAOException;
+	boolean checkEmail(String email) throws DAOException;
+	boolean checkLogin(String login) throws DAOException;
 }

@@ -28,7 +28,7 @@ import by.htp.library.controller.command.impl.WrongRequest;
 public class CommandProvider {
 	private final Map<CommandName, Command> repository = new HashMap<>();
 
-	CommandProvider() {
+	public CommandProvider() {
 		repository.put(CommandName.ADDBOOK, new AddBook());
 		repository.put(CommandName.EDITBOOK, new EditBook());
 		repository.put(CommandName.SEARCHBYTITLE, new SearchByTitle());

@@ -7,16 +7,21 @@ import by.htp.library.dao.factory.DAOFactory;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.exception.ServiceExceptionValid;
+import by.htp.library.service.exception.ServiceExeptionEmailExist;
+import by.htp.library.service.exception.ServiceExeptionLoginExist;
 import by.htp.library.service.validation.ValidationData;
+
 /**
  * @author Mashkouski Andrei
- * @version 1.0 
+ * @version 1.0
  */
 public class ClientServiceImpl implements ClientService {
 	private static final int newUserId = 0;
+
 	/**
 	 * The method returns the user-object by the pair login-password
-	 * @throws ServiceExceptionValid 
+	 * 
+	 * @throws ServiceExceptionValid
 	 */
 	@Override
 	public User singIn(String login, String password) throws ServiceException, ServiceExceptionValid {
@@ -32,6 +37,7 @@ public class ClientServiceImpl implements ClientService {
 			throw new ServiceException("DAOException in singIn ", e);
 		}
 	}
+
 	/**
 	 * The method returns the user by id
 	 */
@@ -45,23 +51,35 @@ public class ClientServiceImpl implements ClientService {
 			throw new ServiceException("DAOException in fetchById ", e);
 		}
 	}
+
 	/**
 	 * The method returns the id of the updated user
-	 * @throws ServiceExceptionValid 
+	 * 
+	 * @throws ServiceExceptionValid
+	 * @throws ServiceExeptionEmailExist
+	 * @throws ServiceExeptionLoginExist 
 	 */
 	@Override
-	public Long saveUser(User user) throws ServiceException, ServiceExceptionValid {
+	public Long saveUser(User user) throws ServiceException, ServiceExceptionValid, ServiceExeptionEmailExist, ServiceExeptionLoginExist {
 		if (!ValidationData.validUser(user)) {
 			throw new ServiceExceptionValid("Incorrect input data");
 		}
 		DAOFactory daoObjectFactory = DAOFactory.getInstance();
 		UserDAO userDAO = daoObjectFactory.getUserDAO();
 		try {
+
 			if (user.getId() == newUserId) {
+				if (userDAO.checkEmail(user.geteMail())) {
+					throw new ServiceExeptionEmailExist("DAOException email exists) ");
+				}
+				if (userDAO.checkLogin(user.getLogin())) {
+					throw new ServiceExeptionLoginExist("DAOException login exists) ");
+				}
 				return userDAO.saveNewUser(user);
 			} else {
 				return userDAO.updateUser(user);
 			}
+
 		} catch (DAOException e) {
 			throw new ServiceException("DAOException in saveUser ", e);
 		}

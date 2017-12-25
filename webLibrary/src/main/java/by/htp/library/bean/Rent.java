@@ -1,14 +1,20 @@
 package by.htp.library.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Entity class serves to store rent-objects with properties
+ * 
  * @author Mashkouski Andrei
- * @version 1.0 
+ * @version 1.0
  */
-public class Rent {
+public class Rent implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long rentId;
 	private long bookId;
 	private long userId;
@@ -19,9 +25,10 @@ public class Rent {
 	public Rent() {
 		super();
 	}
+
 	/**
 	 * Entity class-constructor for rent-objects initializing
-	  */
+	 */
 	public Rent(long rentId, long bookId, long userId, Date start, Date end, int status) {
 		super();
 		this.rentId = rentId;
@@ -121,6 +128,12 @@ public class Rent {
 		if (userId != other.userId)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Rent [rentId=" + rentId + ", bookId=" + bookId + ", userId=" + userId + ", start=" + start + ", end="
+				+ end + ", status=" + status + "]";
 	}
 
 }

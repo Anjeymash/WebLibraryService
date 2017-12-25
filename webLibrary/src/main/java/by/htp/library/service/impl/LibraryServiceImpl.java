@@ -10,12 +10,14 @@ import by.htp.library.service.LibraryService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.validation.ValidationData;
+
 /**
  * @author Mashkouski Andrei
- * @version 1.0 
+ * @version 1.0
  */
 public class LibraryServiceImpl implements LibraryService {
 	private static final int newBookId = 0;
+
 	/**
 	 * The method makes the book inactive
 	 */
@@ -29,6 +31,7 @@ public class LibraryServiceImpl implements LibraryService {
 			throw new ServiceException("DAOException in delBook ", e);
 		}
 	}
+
 	/**
 	 * The method returns the book-object by id
 	 */
@@ -45,6 +48,7 @@ public class LibraryServiceImpl implements LibraryService {
 		}
 		return foundbook;
 	}
+
 	/**
 	 * The method returns the list of books by criteria and search-parameter
 	 */
@@ -62,24 +66,50 @@ public class LibraryServiceImpl implements LibraryService {
 		return foundbooks;
 
 	}
+
 	/**
 	 * The method returns the list of books
 	 */
 	@Override
-	public ArrayList<Book> listBook(String genre) throws ServiceException {
+	public ArrayList<Book> listBook(String genre, int pageId) throws ServiceException {
 		ArrayList<Book> foundbooks = null;
 		try {
 			DAOFactory daoObjectFactory = DAOFactory.getInstance();
 			BookDAO bookDAO = daoObjectFactory.getBookDAO();
-			foundbooks = bookDAO.listBook(genre);
+			foundbooks = bookDAO.listBook(genre, pageId);
 		} catch (DAOException e) {
 			throw new ServiceException("DAOException in listBook ", e);
 		}
 		return foundbooks;
 	}
+	
+	/**
+	 * The method returns the next-page id of the result-list
+	 * 
+	 */
+
+	@Override
+	public int getNextPageId() {
+		DAOFactory daoObjectFactory = DAOFactory.getInstance();
+		BookDAO bookDAO = daoObjectFactory.getBookDAO();
+		return bookDAO.getPagin().getNextPage();
+	}
+
+	/**
+	 * The method returns the limit of pages for the result-list
+	 * 
+	 */
+	@Override
+	public int getLimit() {
+		DAOFactory daoObjectFactory = DAOFactory.getInstance();
+		BookDAO bookDAO = daoObjectFactory.getBookDAO();
+		return bookDAO.getPagin().getLimit();
+	}
+
 	/**
 	 * The method returns the id of the new book
-	 * @throws ServiceExceptionValid 
+	 * 
+	 * @throws ServiceExceptionValid
 	 */
 	@Override
 	public Long saveBook(Book book) throws ServiceException, ServiceExceptionValid {
@@ -98,8 +128,9 @@ public class LibraryServiceImpl implements LibraryService {
 		} catch (DAOException e) {
 			throw new ServiceException("DAOException in saveBook ", e);
 		}
-		
+
 	}
+
 	/**
 	 * The method reduces the amount of available books
 	 */

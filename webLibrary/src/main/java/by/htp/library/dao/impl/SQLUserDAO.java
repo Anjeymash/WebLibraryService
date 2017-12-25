@@ -22,6 +22,8 @@ public class SQLUserDAO implements UserDAO {
 	private static final String SELECT_USER = "select * from user where u_login = ? and u_password = ?";
 	private static final String SELECT_BYID = "select * from user where u_id = ?";
 	private static final String SELECT_ID = "select last_insert_id() as last_id from user";
+	private static final String CHECK_EMAIL = "SELECT u_id FROM user WHERE u_email = ?";
+	private static final String CHECK_LOGIN = "SELECT u_id FROM user WHERE u_login = ?";
 	private static final int INDEX_ONE = 1;
 	private static final int INDEX_TWO = 2;
 	private static final int INDEX_THREE = 3;
@@ -179,11 +181,60 @@ public class SQLUserDAO implements UserDAO {
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("SQL connection error", e);
-		}
-		finally {
+		} finally {
 			conPool.closeConnection(con, ps, rs);
 		}
 		return id;
 	}
 
+	@Override
+	public boolean checkEmail(String email) throws DAOException {
+		boolean isValid = false;
+		PreparedStatement ps = null;
+		Connection con = null;
+		ResultSet rs = null;
+		try {
+			con = conPool.takeConnection();
+			ps = con.prepareStatement(CHECK_EMAIL);
+			ps.setString(INDEX_ONE, email);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				isValid = true;
+			}
+		} catch (SQLException e) {
+			throw new DAOException("fail in checkEmail(String email)", e);
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("SQL connection error", e);
+
+		} finally {
+			conPool.closeConnection(con, ps, rs);
+		}
+		return isValid;
+
+	}
+	@Override
+	public boolean checkLogin(String login) throws DAOException {
+		boolean isValid = false;
+		PreparedStatement ps = null;
+		Connection con = null;
+		ResultSet rs = null;
+		try {
+			con = conPool.takeConnection();
+			ps = con.prepareStatement(CHECK_LOGIN);
+			ps.setString(INDEX_ONE, login);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				isValid = true;
+			}
+		} catch (SQLException e) {
+			throw new DAOException("fail in checkEmail(String email)", e);
+		} catch (ConnectionPoolException e) {
+			throw new DAOException("SQL connection error", e);
+
+		} finally {
+			conPool.closeConnection(con, ps, rs);
+		}
+		return isValid;
+
+	}
 }

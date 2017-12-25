@@ -1,13 +1,18 @@
 package by.htp.library.bean;
 
+import java.io.Serializable;
 
 /**
  * Entity class serves to store book-objects with properties
  * @author Mashkouski Andrei
  * @version 1.0 
  */
-public class Book {
+public class Book implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String title;
 	private String author;
 	private String genre;

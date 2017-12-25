@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import by.htp.library.controller.command.Command;
+import by.htp.library.controller.command.CommandProvider;
 import by.htp.library.controller.command.CommandProviderXML;
 import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.dao.connection.ConnectionPool;

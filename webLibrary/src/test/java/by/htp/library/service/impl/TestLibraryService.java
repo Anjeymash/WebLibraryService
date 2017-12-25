@@ -7,7 +7,10 @@ import by.htp.library.service.LibraryService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.exception.ServiceExceptionValid;
 import by.htp.library.service.factory.ServiceFactory;
-/**Test class for LibraryService
+
+/**
+ * Test class for LibraryService
+ * 
  * @author Mashkouski Andrei
  * @version 1.0
  */

@@ -3,6 +3,7 @@ by.htp.library.controller
 by.htp.library.controller.command
 by.htp.library.controller.command.impl
 by.htp.library.controller.datamanager
+by.htp.library.controller.exception
 by.htp.library.dao
 by.htp.library.dao.connection
 by.htp.library.dao.connection.manager

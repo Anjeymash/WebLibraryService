@@ -13,9 +13,11 @@ public interface LibraryService {
 void delBook(long bookID) throws ServiceException;
 ArrayList<Book> search(String searchparam, String criteria) throws ServiceException;
 Book bookById(Long id)throws ServiceException;
-ArrayList<Book> listBook(String genre)throws ServiceException;
+ArrayList<Book> listBook(String genre, int pageId)throws ServiceException;
 Long saveBook(Book book)throws ServiceException, ServiceExceptionValid;
 Book bookIn(Long id)throws ServiceException;
+int getNextPageId();
+int getLimit();
 
 
 }

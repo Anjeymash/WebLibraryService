@@ -22,6 +22,7 @@ import by.htp.library.service.factory.ServiceFactory;
  */
 public class DelBook implements Command {
 	private static final Logger log = LogManager.getRootLogger();
+	private static final int DEFAULT_OFFSET = 1;
 	/**
 	 * The method serves to delete the book-object 
 	 */
@@ -29,6 +30,7 @@ public class DelBook implements Command {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		LibraryService libraryService = serviceFactory.getLibraryService();
 		long bookID = 0;
+		int limit;
 		Book book;
 		ArrayList<Book> foundBooks = new ArrayList<>();
 		String page = JspManager.INDEX;
@@ -37,11 +39,13 @@ public class DelBook implements Command {
 
 		try {
 			book = libraryService.bookById(bookID);
-			foundBooks = libraryService.listBook(book.getGenre());
 			libraryService.delBook(bookID);
-			foundBooks = libraryService.listBook(book.getGenre());
+			foundBooks = libraryService.listBook(book.getGenre(),DEFAULT_OFFSET);
+			limit = libraryService.getLimit();
 			request.setAttribute(ParameterManager.LIST_BOOK, foundBooks);
+			request.setAttribute(ParameterManager.BOOK_PAGE_LIMIT, limit);
 			request.setAttribute(ParameterManager.MES, "Book " + book.getTitle() + " is deleted");
+			request.setAttribute(ParameterManager.BOOK_GENRE, book.getGenre());
 
 		} catch (ServiceException e) {
 			log.error("ServiceException in DelBook", e);

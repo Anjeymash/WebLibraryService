@@ -19,6 +19,8 @@ import by.htp.library.controller.datamanager.ParameterManager;
 import by.htp.library.service.ClientService;
 import by.htp.library.service.exception.ServiceException;
 import by.htp.library.service.exception.ServiceExceptionValid;
+import by.htp.library.service.exception.ServiceExeptionEmailExist;
+import by.htp.library.service.exception.ServiceExeptionLoginExist;
 import by.htp.library.service.factory.ServiceFactory;
 
 /**
@@ -36,6 +38,7 @@ public class SaveUser implements Command {
 		User user = new User();
 		String page = JspManager.EDIT_USER;
 		HttpSession session = request.getSession();
+		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 
 		// checking: new user or existing
 		if (session.getAttribute(ParameterManager.USER_ID) != null) {
@@ -52,6 +55,7 @@ public class SaveUser implements Command {
 		user.seteMail(request.getParameter(ParameterManager.USER_EMAIL));
 		user.setLocation(request.getParameter(ParameterManager.USER_LOCATION));
 		user.setTel(request.getParameter(ParameterManager.USER_TEL));
+		request.setAttribute(ParameterManager.USER, user);
 		ServiceFactory factory = ServiceFactory.getInstance();
 		ClientService clientService = factory.getClientService();
 
@@ -67,14 +71,18 @@ public class SaveUser implements Command {
 		} catch (ServiceException e) {
 			log.error("ServiceException in SaveUser", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.ERROR);
-			request.setAttribute(ParameterManager.USER, user);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 			dispatcher.forward(request, response);
 		} catch (ServiceExceptionValid e) {
 			log.error("ServiceExceptionValid in SaveUser", e);
 			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.INPUT);
-			request.setAttribute(ParameterManager.USER, user);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+			dispatcher.forward(request, response);
+		} catch (ServiceExeptionEmailExist e) {
+			log.error("ServiceExceptionEmailExist in SaveUser", e);
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.EMAIL_EXIST);
+			dispatcher.forward(request, response);
+		} catch (ServiceExeptionLoginExist e) {
+			log.error("ServiceExceptionLoginExist in SaveUser", e);
+			request.setAttribute(ParameterManager.ERROR_MES, MessageManager.LOGIN_EXIST);
 			dispatcher.forward(request, response);
 		}
 
