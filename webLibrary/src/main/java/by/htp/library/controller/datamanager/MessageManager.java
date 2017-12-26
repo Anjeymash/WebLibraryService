@@ -21,5 +21,12 @@ public class MessageManager {
 	public static final String NUMBER_FORMAT = "Number format is incorrect";
 	public static final String EMAIL_EXIST = "Such a email already exists";
 	public static final Object LOGIN_EXIST = "Such a login already exists";
+	public static final String SINGIN = "singin";
+	public static final String SAVEUSER = "saveuser";
+	public static final String ERROR_EXPRESSION = "&errorMessage=wrong%20login%20or%20password";
+	public static final String PARAM_DELIMITER = "&";
+	public static final String COMMAND_DELIMITER = "?";
+	public static final String ATTR_DELIMITER = "=";
+	public static final String EMPTY_SPACE = "";
 
 }

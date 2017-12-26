@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
+ * Filter class 
  * @author Mashkouski Andrei
  * @version 1.0
  */

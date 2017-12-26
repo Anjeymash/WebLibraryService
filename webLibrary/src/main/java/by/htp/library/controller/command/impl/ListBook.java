@@ -23,6 +23,7 @@ import by.htp.library.service.factory.ServiceFactory;
  */
 public class ListBook implements Command {
 	private static final Logger log = LogManager.getLogger(ListBook.class);
+	private static final int START_NUM = 1;
 
 	/**
 	 * The method serves to retrieve the list-book-object
@@ -32,17 +33,19 @@ public class ListBook implements Command {
 		String page = JspManager.INDEX;
 		String genre;
 		String mes;
+		String errorMes;
 		int pageId;
 		int nextPageId;
 		int limit;
-
+				
 		if (request.getParameter(ParameterManager.BOOK_PAGE) == null) {
-			pageId = 1;
+			pageId = START_NUM;
 		} else {
 			pageId = Integer.parseInt(request.getParameter(ParameterManager.BOOK_PAGE));
 		}
 		genre = request.getParameter(ParameterManager.BOOK_GENRE);
 		mes = request.getParameter(ParameterManager.MES);
+		errorMes = request.getParameter(ParameterManager.ERROR_MES);
 
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		LibraryService libraryService = serviceFactory.getLibraryService();
@@ -52,6 +55,7 @@ public class ListBook implements Command {
 			limit = libraryService.getLimit();
 			request.setAttribute(ParameterManager.LIST_BOOK, foundBooks);
 			request.setAttribute(ParameterManager.MES, mes);
+			request.setAttribute(ParameterManager.ERROR_MES, errorMes);
 			request.setAttribute(ParameterManager.BOOK_GENRE, genre);
 			request.setAttribute(ParameterManager.BOOK_PAGE, nextPageId);
 			request.setAttribute(ParameterManager.BOOK_PAGE_LIMIT, limit);

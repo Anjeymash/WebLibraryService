@@ -12,4 +12,5 @@ public final class JspManager {
 	public static final String EDIT_USER = "WEB-INF/view/edit_User.jsp";
 	public static final String EDIT_RENT = "WEB-INF/view/edit_Rent.jsp";
 	public static final String ERROR = "WEB-INF/view/error.jsp";
+	public static final Object DEFAULT_URL = "/webLibrary/Controller?command=listbook";
 }

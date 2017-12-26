@@ -41,4 +41,6 @@ public final class ParameterManager {
 	public static final String COMMAND_PARAM = "command";
 	public static final String BOOK_PAGE = "page";
 	public static final String BOOK_PAGE_LIMIT = "limit";
+	public static final String ORIGIN_URL = "originURL";
+	
 }
